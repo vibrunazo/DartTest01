@@ -1315,7 +1315,6 @@ $dynamic("get$name").WebKitAnimation = function() { return this.name; };
 $dynamic("get$length").WebKitAnimationList = function() { return this.length; };
 // ********** Code for _AppletElementImpl **************
 $dynamic("get$name").HTMLAppletElement = function() { return this.name; };
-$dynamic("set$width").HTMLAppletElement = function(value) { return this.width = value; };
 // ********** Code for _AreaElementImpl **************
 // ********** Code for _ArrayBufferImpl **************
 // ********** Code for _ArrayBufferViewImpl **************
@@ -1392,11 +1391,14 @@ $dynamic("get$name").WebKitCSSKeyframesRule = function() { return this.name; };
 $dynamic("get$length").CSSRuleList = function() { return this.length; };
 // ********** Code for _CSSStyleDeclarationImpl **************
 $dynamic("get$length").CSSStyleDeclaration = function() { return this.length; };
+$dynamic("set$left").CSSStyleDeclaration = function(value) {
+  this.setProperty("left", value, "");
+}
 $dynamic("set$position").CSSStyleDeclaration = function(value) {
   this.setProperty("position", value, "");
 }
-$dynamic("set$width").CSSStyleDeclaration = function(value) {
-  this.setProperty("width", value, "");
+$dynamic("set$top").CSSStyleDeclaration = function(value) {
+  this.setProperty("top", value, "");
 }
 // ********** Code for _CSSStyleRuleImpl **************
 // ********** Code for _StyleSheetImpl **************
@@ -1406,7 +1408,6 @@ $dynamic("get$length").CSSValueList = function() { return this.length; };
 // ********** Code for _CSSTransformValueImpl **************
 // ********** Code for _CSSUnknownRuleImpl **************
 // ********** Code for _CanvasElementImpl **************
-$dynamic("set$width").HTMLCanvasElement = function(value) { return this.width = value; };
 // ********** Code for _CanvasGradientImpl **************
 // ********** Code for _CanvasPatternImpl **************
 // ********** Code for _CanvasPixelArrayImpl **************
@@ -1924,7 +1925,6 @@ _ElementFactoryProvider.Element$tag$factory = function(tag) {
 // ********** Code for _ElementTraversalImpl **************
 // ********** Code for _EmbedElementImpl **************
 $dynamic("get$name").HTMLEmbedElement = function() { return this.name; };
-$dynamic("set$width").HTMLEmbedElement = function(value) { return this.width = value; };
 // ********** Code for _EntityImpl **************
 // ********** Code for _EntityReferenceImpl **************
 // ********** Code for _EntryArrayImpl **************
@@ -2061,7 +2061,6 @@ function _FrameSetElementEventsImpl(_ptr) {
 // ********** Code for _GeolocationImpl **************
 // ********** Code for _GeopositionImpl **************
 // ********** Code for _HRElementImpl **************
-$dynamic("set$width").HTMLHRElement = function(value) { return this.width = value; };
 // ********** Code for _HTMLAllCollectionImpl **************
 $dynamic("get$length").HTMLAllCollection = function() { return this.length; };
 // ********** Code for _HTMLCollectionImpl **************
@@ -2135,12 +2134,10 @@ $dynamic("clear$0").IDBObjectStore = function() {
 // ********** Code for _IDBVersionChangeRequestImpl **************
 // ********** Code for _IFrameElementImpl **************
 $dynamic("get$name").HTMLIFrameElement = function() { return this.name; };
-$dynamic("set$width").HTMLIFrameElement = function(value) { return this.width = value; };
 // ********** Code for _IceCandidateImpl **************
 // ********** Code for _ImageDataImpl **************
 // ********** Code for _ImageElementImpl **************
 $dynamic("get$name").HTMLImageElement = function() { return this.name; };
-$dynamic("set$width").HTMLImageElement = function(value) { return this.width = value; };
 // ********** Code for _InputElementImpl **************
 $dynamic("get$on").HTMLInputElement = function() {
   return new _InputElementEventsImpl(this);
@@ -2272,7 +2269,6 @@ $dynamic("set$value").HTMLLIElement = function(value) { return this.value = valu
 // ********** Code for _MapElementImpl **************
 $dynamic("get$name").HTMLMapElement = function() { return this.name; };
 // ********** Code for _MarqueeElementImpl **************
-$dynamic("set$width").HTMLMarqueeElement = function(value) { return this.width = value; };
 // ********** Code for _MediaControllerImpl **************
 // ********** Code for _MediaElementAudioSourceNodeImpl **************
 // ********** Code for _MediaErrorImpl **************
@@ -2511,7 +2507,6 @@ _NotificationEventsImpl.prototype.get$click = function() {
 // ********** Code for _OListElementImpl **************
 // ********** Code for _ObjectElementImpl **************
 $dynamic("get$name").HTMLObjectElement = function() { return this.name; };
-$dynamic("set$width").HTMLObjectElement = function(value) { return this.width = value; };
 // ********** Code for _OfflineAudioCompletionEventImpl **************
 // ********** Code for _OperationNotAllowedExceptionImpl **************
 $dynamic("get$name").OperationNotAllowedException = function() { return this.name; };
@@ -2539,7 +2534,6 @@ $dynamic("set$value").HTMLParamElement = function(value) { return this.value = v
 // ********** Code for _PopStateEventImpl **************
 // ********** Code for _PositionErrorImpl **************
 // ********** Code for _PreElementImpl **************
-$dynamic("set$width").HTMLPreElement = function(value) { return this.width = value; };
 // ********** Code for _ProcessingInstructionImpl **************
 // ********** Code for _ProgressElementImpl **************
 $dynamic("get$value").HTMLProgressElement = function() { return this.value; };
@@ -2728,7 +2722,6 @@ $dynamic("clear$0").SVGPointList = function() {
 // ********** Code for _SVGPreserveAspectRatioImpl **************
 // ********** Code for _SVGRadialGradientElementImpl **************
 // ********** Code for _SVGRectImpl **************
-$dynamic("set$width").SVGRect = function(value) { return this.width = value; };
 // ********** Code for _SVGRectElementImpl **************
 // ********** Code for _SVGRenderingIntentImpl **************
 // ********** Code for _SVGSVGElementImpl **************
@@ -2866,11 +2859,8 @@ $dynamic("add$1").StyleSheetList = function($0) {
 };
 // ********** Code for _TableCaptionElementImpl **************
 // ********** Code for _TableCellElementImpl **************
-$dynamic("set$width").HTMLTableCellElement = function(value) { return this.width = value; };
 // ********** Code for _TableColElementImpl **************
-$dynamic("set$width").HTMLTableColElement = function(value) { return this.width = value; };
 // ********** Code for _TableElementImpl **************
-$dynamic("set$width").HTMLTableElement = function(value) { return this.width = value; };
 // ********** Code for _TableRowElementImpl **************
 // ********** Code for _TableSectionElementImpl **************
 // ********** Code for _TextAreaElementImpl **************
@@ -3036,7 +3026,6 @@ $dynamic("add$1").Uint8Array = function($0) {
 // ********** Code for _UnknownElementImpl **************
 // ********** Code for _ValidityStateImpl **************
 // ********** Code for _VideoElementImpl **************
-$dynamic("set$width").HTMLVideoElement = function(value) { return this.width = value; };
 // ********** Code for _WaveShaperNodeImpl **************
 // ********** Code for _WaveTableImpl **************
 // ********** Code for _WebGLActiveInfoImpl **************
@@ -3238,7 +3227,8 @@ var _pendingMeasurementFrameCallbacks;
 //  ********** Library test01 **************
 // ********** Code for test01 **************
 function test01() {
-
+  this.x = (300.0);
+  this.y = (100.0);
 }
 test01.prototype.run = function() {
   this.write("Hello World!");
@@ -3247,9 +3237,7 @@ test01.prototype.write = function(message) {
   get$$document().query("#status").set$innerHTML(message);
   var pic = _ElementFactoryProvider.Element$tag$factory("img");
   pic.get$attributes().$setindex("src", "img/hi00.png");
-  get$$document().body.get$nodes().add(pic);
-  pic.set$width((100));
-  Util.abs(pic);
+  var duck = new Duck("img/hi00.png");
   get$$document().queryAll("img").forEach((function (el) {
     el.get$on().get$click().add$1((function (e) {
       return print$("Person clicked");
@@ -3258,17 +3246,30 @@ test01.prototype.write = function(message) {
   })
   );
 }
+// ********** Code for Duck **************
+function Duck(img) {
+  this.x = (300.0);
+  this.y = (100.0);
+  this.elem = _ElementFactoryProvider.Element$tag$factory("img");
+  get$$document().body.get$nodes().add(this.elem);
+  Util.abs(this.elem);
+  Util.pos(this.elem, this.x, this.y);
+}
 // ********** Code for Util **************
 function Util() {}
 Util.abs = function(elem) {
   elem.get$style().set$position("absolute");
 }
+Util.pos = function(elem, x, y) {
+  elem.get$style().set$left(("" + x + "PX"));
+  elem.get$style().set$top(("" + y + "PX"));
+}
 // ********** Code for top level **************
 function main() {
   new test01().run();
 }
-// 134 dynamic types.
-// 272 types
+// 125 dynamic types.
+// 271 types
 // 22 !leaf
 (function(){
   var v0/*SVGElement*/ = 'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement';
