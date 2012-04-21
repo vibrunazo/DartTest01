@@ -415,18 +415,6 @@ Function.prototype.call$2 = function($0, $1) {
 };
 function to$call$2(f) { return f && f.to$call$2(); }
 // ********** Code for top level **************
-function print$(obj) {
-  return _print(obj);
-}
-function _print(obj) {
-  if (typeof console == 'object') {
-    if (obj) obj = obj.toString();
-    console.log(obj);
-  } else if (typeof write === 'function') {
-    write(obj);
-    write('\n');
-  }
-}
 function _toDartException(e) {
   function attachStack(dartEx) {
     // TODO(jmesserly): setting the stack property is not a long term solution.
@@ -1218,9 +1206,6 @@ function _constMap(itemsAndKeys) {
 }
 //  ********** Library html **************
 // ********** Code for _EventTargetImpl **************
-$dynamic("get$on").EventTarget = function() {
-  return new _EventsImpl(this);
-}
 // ********** Code for _NodeImpl **************
 $dynamic("get$nodes").Node = function() {
   return new _ChildNodeListLazy(this);
@@ -1265,9 +1250,6 @@ $dynamic("get$attributes").Element = function() {
 $dynamic("get$elements").Element = function() {
   return new _ChildrenElementList._wrap$ctor(this);
 }
-$dynamic("queryAll").Element = function(selectors) {
-  return new _FrozenElementList._wrap$ctor(this.querySelectorAll(selectors));
-}
 $dynamic("get$on").Element = function() {
   return new _ElementEventsImpl(this);
 }
@@ -1287,24 +1269,6 @@ $dynamic("get$click").Element = function() {
 }
 // ********** Code for _HTMLElementImpl **************
 // ********** Code for _AbstractWorkerImpl **************
-$dynamic("get$on").AbstractWorker = function() {
-  return new _AbstractWorkerEventsImpl(this);
-}
-// ********** Code for _EventsImpl **************
-function _EventsImpl(_ptr) {
-  this._ptr = _ptr;
-}
-_EventsImpl.prototype.$index = function(type) {
-  return this._get(type.toLowerCase());
-}
-_EventsImpl.prototype._get = function(type) {
-  return new _EventListenerListImpl(this._ptr, type);
-}
-// ********** Code for _AbstractWorkerEventsImpl **************
-$inherits(_AbstractWorkerEventsImpl, _EventsImpl);
-function _AbstractWorkerEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _AnchorElementImpl **************
 $dynamic("get$name").HTMLAnchorElement = function() { return this.name; };
 // ********** Code for _AnimationImpl **************
@@ -1353,6 +1317,16 @@ $dynamic("set$value").AudioParam = function(value) { return this.value = value; 
 // ********** Code for _BodyElementImpl **************
 $dynamic("get$on").HTMLBodyElement = function() {
   return new _BodyElementEventsImpl(this);
+}
+// ********** Code for _EventsImpl **************
+function _EventsImpl(_ptr) {
+  this._ptr = _ptr;
+}
+_EventsImpl.prototype.$index = function(type) {
+  return this._get(type.toLowerCase());
+}
+_EventsImpl.prototype._get = function(type) {
+  return new _EventListenerListImpl(this._ptr, type);
 }
 // ********** Code for _ElementEventsImpl **************
 $inherits(_ElementEventsImpl, _EventsImpl);
@@ -1462,14 +1436,6 @@ $dynamic("get$length").ClientRectList = function() { return this.length; };
 // ********** Code for _CustomEventImpl **************
 // ********** Code for _DListElementImpl **************
 // ********** Code for _DOMApplicationCacheImpl **************
-$dynamic("get$on").DOMApplicationCache = function() {
-  return new _DOMApplicationCacheEventsImpl(this);
-}
-// ********** Code for _DOMApplicationCacheEventsImpl **************
-$inherits(_DOMApplicationCacheEventsImpl, _EventsImpl);
-function _DOMApplicationCacheEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _DOMExceptionImpl **************
 $dynamic("get$name").DOMException = function() { return this.name; };
 // ********** Code for _DOMFileSystemImpl **************
@@ -1542,31 +1508,6 @@ $dynamic("query").HTMLDocument = function(selectors) {
 }
 $dynamic("$dom_querySelector").HTMLDocument = function(selectors) {
   return this.querySelector(selectors);
-}
-$dynamic("queryAll").HTMLDocument = function(selectors) {
-  if (const$0007.hasMatch(selectors)) {
-    var mutableMatches = this.getElementsByName(selectors.substring((7), selectors.length - (2)));
-    var len = mutableMatches.get$length();
-    var copyOfMatches = new Array(len);
-    for (var i = (0);
-     i < len; ++i) {
-      copyOfMatches.$setindex(i, mutableMatches.$index(i));
-    }
-    return new _FrozenElementList._wrap$ctor(copyOfMatches);
-  }
-  else if (const$0008.hasMatch(selectors)) {
-    var mutableMatches = this.getElementsByTagName(selectors);
-    var len = mutableMatches.get$length();
-    var copyOfMatches = new Array(len);
-    for (var i = (0);
-     i < len; ++i) {
-      copyOfMatches.$setindex(i, mutableMatches.$index(i));
-    }
-    return new _FrozenElementList._wrap$ctor(copyOfMatches);
-  }
-  else {
-    return new _FrozenElementList._wrap$ctor(this.querySelectorAll(selectors));
-  }
 }
 // ********** Code for _DocumentEventsImpl **************
 $inherits(_DocumentEventsImpl, _ElementEventsImpl);
@@ -1648,9 +1589,6 @@ $dynamic("get$elements").DocumentFragment = function() {
     this._elements = new FilteredElementList(this);
   }
   return this._elements;
-}
-$dynamic("queryAll").DocumentFragment = function(selectors) {
-  return new _FrozenElementList._wrap$ctor(this.querySelectorAll(selectors));
 }
 $dynamic("set$innerHTML").DocumentFragment = function(value) {
   this.get$nodes().clear$_();
@@ -1935,14 +1873,6 @@ $dynamic("get$length").EntryArraySync = function() { return this.length; };
 // ********** Code for _EventExceptionImpl **************
 $dynamic("get$name").EventException = function() { return this.name; };
 // ********** Code for _EventSourceImpl **************
-$dynamic("get$on").EventSource = function() {
-  return new _EventSourceEventsImpl(this);
-}
-// ********** Code for _EventSourceEventsImpl **************
-$inherits(_EventSourceEventsImpl, _EventsImpl);
-function _EventSourceEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _EventListenerListImpl **************
 function _EventListenerListImpl(_ptr, _type) {
   this._ptr = _ptr;
@@ -2319,14 +2249,6 @@ $dynamic("get$length").MediaStreamTrackList = function() { return this.length; }
 // ********** Code for _MessageChannelImpl **************
 // ********** Code for _MessageEventImpl **************
 // ********** Code for _MessagePortImpl **************
-$dynamic("get$on").MessagePort = function() {
-  return new _MessagePortEventsImpl(this);
-}
-// ********** Code for _MessagePortEventsImpl **************
-$inherits(_MessagePortEventsImpl, _EventsImpl);
-function _MessagePortEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _MetaElementImpl **************
 $dynamic("get$name").HTMLMetaElement = function() { return this.name; };
 // ********** Code for _MetadataImpl **************
@@ -2489,17 +2411,6 @@ $dynamic("clear$0").NodeList = function() {
 // ********** Code for _NodeSelectorImpl **************
 // ********** Code for _NotationImpl **************
 // ********** Code for _NotificationImpl **************
-$dynamic("get$on").Notification = function() {
-  return new _NotificationEventsImpl(this);
-}
-// ********** Code for _NotificationEventsImpl **************
-$inherits(_NotificationEventsImpl, _EventsImpl);
-function _NotificationEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
-_NotificationEventsImpl.prototype.get$click = function() {
-  return this._get("click");
-}
 // ********** Code for _NotificationCenterImpl **************
 // ********** Code for _OESStandardDerivativesImpl **************
 // ********** Code for _OESTextureFloatImpl **************
@@ -2602,17 +2513,6 @@ $dynamic("set$value").SVGAngle = function(value) { return this.value = value; };
 // ********** Code for _SVGDescElementImpl **************
 // ********** Code for _SVGDocumentImpl **************
 // ********** Code for _SVGElementInstanceImpl **************
-$dynamic("get$on").SVGElementInstance = function() {
-  return new _SVGElementInstanceEventsImpl(this);
-}
-// ********** Code for _SVGElementInstanceEventsImpl **************
-$inherits(_SVGElementInstanceEventsImpl, _EventsImpl);
-function _SVGElementInstanceEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
-_SVGElementInstanceEventsImpl.prototype.get$click = function() {
-  return this._get("click");
-}
 // ********** Code for _SVGElementInstanceListImpl **************
 $dynamic("get$length").SVGElementInstanceList = function() { return this.length; };
 // ********** Code for _SVGEllipseElementImpl **************
@@ -3050,61 +2950,18 @@ $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
 // ********** Code for _WebKitMutationObserverImpl **************
 // ********** Code for _WebKitNamedFlowImpl **************
 // ********** Code for _WebSocketImpl **************
-$dynamic("get$on").WebSocket = function() {
-  return new _WebSocketEventsImpl(this);
-}
-// ********** Code for _WebSocketEventsImpl **************
-$inherits(_WebSocketEventsImpl, _EventsImpl);
-function _WebSocketEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _WheelEventImpl **************
 // ********** Code for _WindowImpl **************
-$dynamic("get$on").DOMWindow = function() {
-  return new _WindowEventsImpl(this);
-}
 $dynamic("get$length").DOMWindow = function() { return this.length; };
 $dynamic("get$name").DOMWindow = function() { return this.name; };
-// ********** Code for _WindowEventsImpl **************
-$inherits(_WindowEventsImpl, _EventsImpl);
-function _WindowEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
-_WindowEventsImpl.prototype.get$click = function() {
-  return this._get("click");
-}
 // ********** Code for _WorkerImpl **************
-$dynamic("get$on").Worker = function() {
-  return new _WorkerEventsImpl(this);
-}
-// ********** Code for _WorkerEventsImpl **************
-$inherits(_WorkerEventsImpl, _AbstractWorkerEventsImpl);
-function _WorkerEventsImpl(_ptr) {
-  _AbstractWorkerEventsImpl.call(this, _ptr);
-}
 // ********** Code for _WorkerLocationImpl **************
 // ********** Code for _WorkerNavigatorImpl **************
 // ********** Code for _XMLHttpRequestImpl **************
-$dynamic("get$on").XMLHttpRequest = function() {
-  return new _XMLHttpRequestEventsImpl(this);
-}
-// ********** Code for _XMLHttpRequestEventsImpl **************
-$inherits(_XMLHttpRequestEventsImpl, _EventsImpl);
-function _XMLHttpRequestEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _XMLHttpRequestExceptionImpl **************
 $dynamic("get$name").XMLHttpRequestException = function() { return this.name; };
 // ********** Code for _XMLHttpRequestProgressEventImpl **************
 // ********** Code for _XMLHttpRequestUploadImpl **************
-$dynamic("get$on").XMLHttpRequestUpload = function() {
-  return new _XMLHttpRequestUploadEventsImpl(this);
-}
-// ********** Code for _XMLHttpRequestUploadEventsImpl **************
-$inherits(_XMLHttpRequestUploadEventsImpl, _EventsImpl);
-function _XMLHttpRequestUploadEventsImpl(_ptr) {
-  _EventsImpl.call(this, _ptr);
-}
 // ********** Code for _XMLSerializerImpl **************
 // ********** Code for _XPathEvaluatorImpl **************
 // ********** Code for _XPathExceptionImpl **************
@@ -3237,23 +3094,24 @@ test01.prototype.run = function() {
   this.write("Hello World!");
 }
 test01.prototype.write = function(message) {
+  var $this = this; // closure support
   get$$document().query("#status").set$innerHTML(message);
-  var duck = new Duck("img/hi00.png");
+  var bug = new Bug("img/hi00.png");
   var logo = new Logo("img/dartlogo.png");
   get$$window().setInterval((function () {
-    return duck.move();
+    return bug.move();
   })
   , (50));
-  get$$document().queryAll("img").forEach((function (el) {
-    el.get$on().get$click().add$1((function (e) {
-      return print$("Person clicked");
-    })
-    );
+  get$$window().setInterval((function () {
+    return $this.detectColision();
   })
-  );
+  , (50));
 }
-// ********** Code for Duck **************
-function Duck(image_source) {
+test01.prototype.detectColision = function() {
+
+}
+// ********** Code for Bug **************
+function Bug(image_source) {
   var $this = this; // closure support
   this.x = (300.0);
   this.y = (100.0);
@@ -3267,7 +3125,7 @@ function Duck(image_source) {
   })
   );
 }
-Duck.prototype.move = function() {
+Bug.prototype.move = function() {
   this.y = this.y + (10);
   Util.pos(this.imgtag, this.x, this.y);
 }
@@ -3294,21 +3152,18 @@ Util.pos = function(elem, x, y) {
 function main() {
   new test01().run();
 }
-// 125 dynamic types.
-// 271 types
-// 22 !leaf
+// 114 dynamic types.
+// 259 types
+// 20 !leaf
 (function(){
   var v0/*SVGElement*/ = 'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement';
   var v1/*CharacterData*/ = 'CharacterData|Comment|Text|CDATASection';
   var v2/*HTMLDocument*/ = 'HTMLDocument|SVGDocument';
   var v3/*DocumentFragment*/ = 'DocumentFragment|ShadowRoot';
   var v4/*Element*/ = [v0/*SVGElement*/,'Element|HTMLElement|HTMLAnchorElement|HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDetailsElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMediaElement|HTMLAudioElement|HTMLVideoElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement'].join('|');
-  var v5/*AbstractWorker*/ = 'AbstractWorker|SharedWorker|Worker';
-  var v6/*Node*/ = [v1/*CharacterData*/,v2/*HTMLDocument*/,v3/*DocumentFragment*/,v4/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|');
   var table = [
     // [dynamic-dispatch-tag, tags of classes implementing dynamic-dispatch-tag]
-    ['AbstractWorker', v5/*AbstractWorker*/]
-    , ['AudioParam', 'AudioParam|AudioGain']
+    ['AudioParam', 'AudioParam|AudioGain']
     , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue']
     , ['CharacterData', v1/*CharacterData*/]
     , ['DOMTokenList', 'DOMTokenList|DOMSettableTokenList']
@@ -3318,9 +3173,8 @@ function main() {
     , ['Element', v4/*Element*/]
     , ['Entry', 'Entry|DirectoryEntry|FileEntry']
     , ['EntrySync', 'EntrySync|DirectoryEntrySync|FileEntrySync']
-    , ['Node', v6/*Node*/]
-    , ['EventTarget', [v5/*AbstractWorker*/,v6/*Node*/,'EventTarget|DOMApplicationCache|EventSource|MessagePort|Notification|SVGElementInstance|WebSocket|DOMWindow|XMLHttpRequest|XMLHttpRequestUpload'].join('|')]
     , ['HTMLCollection', 'HTMLCollection|HTMLOptionsCollection']
+    , ['Node', [v1/*CharacterData*/,v2/*HTMLDocument*/,v3/*DocumentFragment*/,v4/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
     , ['Uint8Array', 'Uint8Array|Uint8ClampedArray']
   ];
   $dynamicSetMetadata(table);
@@ -3335,8 +3189,6 @@ var const$0003 = Object.create(EmptyQueueException.prototype, {});
 var const$0004 = Object.create(UnsupportedOperationException.prototype, {_message: {"value": "", writeable: false}});
 var const$0005 = Object.create(IllegalAccessException.prototype, {});
 var const$0006 = _constMap([]);
-var const$0007 = new JSSyntaxRegExp("^\\[name=[\"'][^'\"]+['\"]\\]$");
-var const$0008 = new JSSyntaxRegExp("^[*a-zA-Z0-9]+$");
 $static_init();
 if (typeof window != 'undefined' && typeof document != 'undefined' &&
     window.addEventListener && document.readyState == 'loading') {

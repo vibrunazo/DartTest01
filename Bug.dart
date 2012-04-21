@@ -1,10 +1,10 @@
-class Duck {
+class Bug {
   
   double x;
   double y;
   Element imgtag;
   
-  Duck(String image_source) {
+  Bug(String image_source) {
     x = 300.0;
     y = 100.0;
     
