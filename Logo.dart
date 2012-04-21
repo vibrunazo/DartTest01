@@ -1,7 +1,7 @@
 class Logo {
   double x;
   double y;
-  Element imgtag;
+  ImageElement imgtag;
   
   Logo(String image_source) {
     x = 300.0;
@@ -12,5 +12,6 @@ class Logo {
     document.body.nodes.add(imgtag);
     Util.abs(imgtag);
     Util.pos(imgtag, x, y);
+    imgtag.width = 50;
   }
 }
