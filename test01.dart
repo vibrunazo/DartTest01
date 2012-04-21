@@ -1,6 +1,7 @@
 #import('dart:html');
 
 #source('Duck.dart');
+#source('Logo.dart');
 #source('Util.dart');
 
 class test01 {
@@ -21,15 +22,16 @@ class test01 {
     document.query('#status').innerHTML = message;
 //    document.query("#img").attributes.dynamic = 20;
     
-    var pic = new Element.tag('img');
+//    var pic = new Element.tag('img');
 //    var pic = new ImageElement();
 //ImageElement pic2 = new ImageElement;
 //    pic.classes.add('avatar');
 //    pic.classes.toggle('main');
 
-    pic.attributes['src'] = 'img/hi00.png';
+//    pic.attributes['src'] = 'img/hi00.png';
     
     Duck duck = new Duck('img/hi00.png');
+    Logo logo = new Logo('img/dartlogo.png');
     
     
 //    document.body.nodes.add(pic);
@@ -42,7 +44,7 @@ class test01 {
     
 //    window.setInterval(() => Util.pos(pic, x, y+=10), 50);
 //    window.setInterval(() => move(pic), 50);
-//    window.setInterval(() => duck.move(), 50);
+    window.setInterval(() => duck.move(), 50);
 //    Util.pos(pic, 300.0, 300.0);
     
     document.queryAll('img').forEach((el) {

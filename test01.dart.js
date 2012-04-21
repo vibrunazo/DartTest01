@@ -3218,6 +3218,9 @@ function _FixedSizeListIterator_html_Touch(array) {
   _VariableSizeListIterator_html_Touch.call(this, array);
 }
 // ********** Code for top level **************
+function get$$window() {
+  return window;
+}
 function get$$document() {
   return document;
 }
@@ -3235,9 +3238,12 @@ test01.prototype.run = function() {
 }
 test01.prototype.write = function(message) {
   get$$document().query("#status").set$innerHTML(message);
-  var pic = _ElementFactoryProvider.Element$tag$factory("img");
-  pic.get$attributes().$setindex("src", "img/hi00.png");
   var duck = new Duck("img/hi00.png");
+  var logo = new Logo("img/dartlogo.png");
+  get$$window().setInterval((function () {
+    return duck.move();
+  })
+  , (50));
   get$$document().queryAll("img").forEach((function (el) {
     el.get$on().get$click().add$1((function (e) {
       return print$("Person clicked");
@@ -3247,13 +3253,33 @@ test01.prototype.write = function(message) {
   );
 }
 // ********** Code for Duck **************
-function Duck(img) {
+function Duck(image_source) {
+  var $this = this; // closure support
   this.x = (300.0);
   this.y = (100.0);
-  this.elem = _ElementFactoryProvider.Element$tag$factory("img");
-  get$$document().body.get$nodes().add(this.elem);
-  Util.abs(this.elem);
-  Util.pos(this.elem, this.x, this.y);
+  this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$attributes().$setindex("src", image_source);
+  get$$document().body.get$nodes().add(this.imgtag);
+  Util.abs(this.imgtag);
+  Util.pos(this.imgtag, this.x, this.y);
+  this.imgtag.get$on().get$click().add$1((function (e) {
+    return $this.imgtag.remove();
+  })
+  );
+}
+Duck.prototype.move = function() {
+  this.y = this.y + (10);
+  Util.pos(this.imgtag, this.x, this.y);
+}
+// ********** Code for Logo **************
+function Logo(image_source) {
+  this.x = (300.0);
+  this.y = (400.0);
+  this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$attributes().$setindex("src", image_source);
+  get$$document().body.get$nodes().add(this.imgtag);
+  Util.abs(this.imgtag);
+  Util.pos(this.imgtag, this.x, this.y);
 }
 // ********** Code for Util **************
 function Util() {}
