@@ -25,7 +25,7 @@ class Bug {
   }
   
   click() {
-//    imgtag.remove();
+    imgtag.remove();
     game.score += 10;
     print("Score: ${game.score}");
   }

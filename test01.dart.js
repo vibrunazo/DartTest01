@@ -3221,6 +3221,7 @@ var _pendingMeasurementFrameCallbacks;
 function test01() {
   this.x = (300.0);
   this.y = (100.0);
+  this.time = (0);
   this.score = (0);
 }
 test01.prototype.get$x = function() { return this.x; };
@@ -3239,6 +3240,15 @@ test01.prototype.write = function(message) {
     return $this.detectColision();
   })
   , (50));
+  get$$window().setInterval((function () {
+    return $this.createObjs();
+  })
+  , (1000));
+}
+test01.prototype.createObjs = function() {
+  var bug = new Bug(this, "img/hi00.png");
+  this.bugs.add(bug);
+  this.time = this.time + (1);
 }
 test01.prototype.detectColision = function() {
   var $$list = this.bugs;
@@ -3288,6 +3298,7 @@ Bug.prototype.move = function() {
 }
 Bug.prototype.click = function() {
   var $0;
+  this.imgtag.remove();
   ($0 = this.game).score = $0.score + (10);
   print$(("Score: " + this.game.score));
 }
