@@ -27,7 +27,9 @@ class Bug {
   click() {
 //    imgtag.remove();
     game.score += 10;
+    
     print("Score: ${game.score}");
+    document.query('#score').text = "${game.score}";
   }
   
   
