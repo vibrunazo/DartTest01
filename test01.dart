@@ -19,7 +19,7 @@ class test01 {
   }
 
   void run() {
-    write("Hello World!");
+    write("Kill the bugs before they kill Dart!");
     
   }
 
@@ -29,7 +29,7 @@ class test01 {
     
     bugs = new List<Bug>();
     
-    Bug bug = new Bug(this, 'img/hi00.png');
+    Bug bug = new Bug(this, 'img/bug01.png');
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
     
@@ -40,7 +40,7 @@ class test01 {
   }
   
   void createObjs() {
-    Bug bug = new Bug(this, 'img/hi00.png');
+    Bug bug = new Bug(this, 'img/bug01.png');
     bugs.add(bug);
 
     time += 1;

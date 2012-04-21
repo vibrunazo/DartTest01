@@ -7,9 +7,9 @@ class Bug {
   test01 game;
   
   Bug(this.game, String image_source) {
-    x = Math.random() * 800;
+    x = Math.random() * 600;
     y = 100.0;
-    speed = 10 + Math.random() * 15;
+    speed = 5 + Math.random() * 10;
     
     imgtag = new Element.tag('img');
     imgtag.attributes['src'] = image_source;

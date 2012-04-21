@@ -3227,13 +3227,13 @@ function test01() {
 test01.prototype.get$x = function() { return this.x; };
 test01.prototype.get$y = function() { return this.y; };
 test01.prototype.run = function() {
-  this.write("Hello World!");
+  this.write("Kill the bugs before they kill Dart!");
 }
 test01.prototype.write = function(message) {
   var $this = this; // closure support
   get$$document().query("#status").set$innerHTML(message);
   this.bugs = new Array();
-  var bug = new Bug(this, "img/hi00.png");
+  var bug = new Bug(this, "img/bug01.png");
   this.bugs.add(bug);
   this.logo = new Logo("img/dartlogo.png");
   get$$window().setInterval((function () {
@@ -3246,7 +3246,7 @@ test01.prototype.write = function(message) {
   , (1000));
 }
 test01.prototype.createObjs = function() {
-  var bug = new Bug(this, "img/hi00.png");
+  var bug = new Bug(this, "img/bug01.png");
   this.bugs.add(bug);
   this.time = this.time + (1);
 }
@@ -3273,8 +3273,9 @@ test01.prototype.distanceBetweenObjs = function(obj1, obj2) {
 function Bug(game, image_source) {
   var $this = this; // closure support
   this.game = game;
-  this.x = (300.0);
+  this.x = Math.random() * (600);
   this.y = (100.0);
+  this.speed = (5) + Math.random() * (10);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", image_source);
   get$$document().body.get$nodes().add(this.imgtag);
@@ -3293,7 +3294,18 @@ function Bug(game, image_source) {
 Bug.prototype.get$x = function() { return this.x; };
 Bug.prototype.get$y = function() { return this.y; };
 Bug.prototype.move = function() {
-  this.y = this.y + (10);
+  if (this.game.logo.x > this.x) {
+    this.x = this.x + this.speed;
+  }
+  if (this.game.logo.x < this.x) {
+    this.x = this.x - this.speed;
+  }
+  if (this.game.logo.y > this.y) {
+    this.y = this.y + this.speed;
+  }
+  if (this.game.logo.y < this.y) {
+    this.y = this.y - this.speed;
+  }
   Util.pos(this.imgtag, this.x, this.y);
 }
 Bug.prototype.click = function() {
