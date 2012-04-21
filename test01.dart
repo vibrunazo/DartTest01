@@ -8,6 +8,7 @@ class test01 {
 
   double x = 300.0;
   double y = 100.0;
+  int time = 0;
   
   List<Bug> bugs;
   Logo logo;
@@ -18,7 +19,7 @@ class test01 {
   }
 
   void run() {
-    write("Hello World!");
+    write("Kill the bugs before they kill Dart!");
     
   }
 
@@ -28,14 +29,21 @@ class test01 {
     
     bugs = new List<Bug>();
     
-    Bug bug = new Bug(this, 'img/hi00.png');
+    Bug bug = new Bug(this, 'img/bug01.png');
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
     
     
-//    window.setInterval(() => bug.move(), 50);
     window.setInterval(() => detectColision(), 50);
+    window.setInterval(() => createObjs(), 1000);
     
+  }
+  
+  void createObjs() {
+    Bug bug = new Bug(this, 'img/bug01.png');
+    bugs.add(bug);
+
+    time += 1;
   }
 
   void detectColision() {
