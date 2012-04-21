@@ -429,6 +429,18 @@ Function.prototype.call$2 = function($0, $1) {
 function to$call$2(f) { return f && f.to$call$2(); }
 // ********** Code for Math **************
 // ********** Code for top level **************
+function print$(obj) {
+  return _print(obj);
+}
+function _print(obj) {
+  if (typeof console == 'object') {
+    if (obj) obj = obj.toString();
+    console.log(obj);
+  } else if (typeof write === 'function') {
+    write(obj);
+    write('\n');
+  }
+}
 function _toDartException(e) {
   function attachStack(dartEx) {
     // TODO(jmesserly): setting the stack property is not a long term solution.
@@ -3209,6 +3221,7 @@ var _pendingMeasurementFrameCallbacks;
 function test01() {
   this.x = (300.0);
   this.y = (100.0);
+  this.score = (0);
 }
 test01.prototype.get$x = function() { return this.x; };
 test01.prototype.get$y = function() { return this.y; };
@@ -3219,7 +3232,7 @@ test01.prototype.write = function(message) {
   var $this = this; // closure support
   get$$document().query("#status").set$innerHTML(message);
   this.bugs = new Array();
-  var bug = new Bug("img/hi00.png");
+  var bug = new Bug(this, "img/hi00.png");
   this.bugs.add(bug);
   this.logo = new Logo("img/dartlogo.png");
   get$$window().setInterval((function () {
@@ -3247,8 +3260,9 @@ test01.prototype.distanceBetweenObjs = function(obj1, obj2) {
   return Math.sqrt(dx + dy);
 }
 // ********** Code for Bug **************
-function Bug(image_source) {
+function Bug(game, image_source) {
   var $this = this; // closure support
+  this.game = game;
   this.x = (300.0);
   this.y = (100.0);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
@@ -3273,7 +3287,9 @@ Bug.prototype.move = function() {
   Util.pos(this.imgtag, this.x, this.y);
 }
 Bug.prototype.click = function() {
-  this.imgtag.remove();
+  var $0;
+  ($0 = this.game).score = $0.score + (10);
+  print$(("Score: " + this.game.score));
 }
 Bug.prototype.get$click = function() {
   return this.click.bind(this);
@@ -3302,7 +3318,8 @@ Util.pos = function(elem, x, y) {
 }
 // ********** Code for top level **************
 function main() {
-  new test01().run();
+  var game = new test01();
+  game.run();
 }
 // 168 dynamic types.
 // 283 types

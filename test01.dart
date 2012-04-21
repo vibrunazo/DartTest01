@@ -12,6 +12,8 @@ class test01 {
   List<Bug> bugs;
   Logo logo;
   
+  int score = 0;
+  
   test01() {
   }
 
@@ -26,7 +28,7 @@ class test01 {
     
     bugs = new List<Bug>();
     
-    Bug bug = new Bug('img/hi00.png');
+    Bug bug = new Bug(this, 'img/hi00.png');
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
     
@@ -58,5 +60,6 @@ class test01 {
 }
 
 void main() {
-  new test01().run();
+  test01 game = new test01();
+  game.run();
 }

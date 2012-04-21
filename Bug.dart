@@ -3,8 +3,9 @@ class Bug {
   double x;
   double y;
   ImageElement imgtag;
+  test01 game;
   
-  Bug(String image_source) {
+  Bug(this.game, String image_source) {
     x = 300.0;
     y = 100.0;
     
@@ -24,7 +25,9 @@ class Bug {
   }
   
   click() {
-    imgtag.remove();
+//    imgtag.remove();
+    game.score += 10;
+    print("Score: ${game.score}");
   }
   
   
