@@ -49,7 +49,8 @@ class Bug {
     print("Score: ${game.score}");
     document.query('#score').text = "${game.score}";
     
-    kill();
+    game.killBug(this);
+    
   }
   
   kill() {

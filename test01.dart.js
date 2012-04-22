@@ -3386,6 +3386,7 @@ function test01() {
   this.running = true;
   this.MAXWAVES = (20);
   this.score = (0);
+  this.life = (3);
 }
 test01.prototype.get$x = function() { return this.x; };
 test01.prototype.get$y = function() { return this.y; };
@@ -3400,6 +3401,13 @@ test01.prototype.write = function(message) {
   var bug = new Bug(this, "img/bug01.png");
   this.bugs.add(bug);
   this.logo = new Logo("img/dartlogo.png");
+  this.heart2 = new Heart("img/heart02.png");
+  this.heart3 = new Heart("img/heart02.png");
+  this.heart3.x = (400.0);
+  this.heart3.setPos();
+  this.heart1 = new Heart("img/heart02.png");
+  this.heart1.x = (200.0);
+  this.heart1.setPos();
   get$$window().setInterval((function () {
     return $this.detectColision();
   })
@@ -3445,8 +3453,12 @@ test01.prototype.detectColision = function() {
   var $$list = this.bugs;
   for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
     var bug = $$i.next();
+    if (bug == null) {
+      continue;
+    }
     if (this.distanceToLogo(bug) < (30)) {
-      bug.imgtag.remove();
+      this.killBug(bug);
+      this.damage();
     }
   }
 }
@@ -3460,10 +3472,43 @@ test01.prototype.distanceBetweenObjs = function(obj1, obj2) {
   dy = dy * dy;
   return Math.sqrt(dx + dy);
 }
-test01.prototype.lose = function() {
+test01.prototype.damage = function(dmg) {
+  if (dmg != null) this.life = this.life - dmg;
+  else this.life = this.life - (1);
+  if (this.life <= (2)) {
+    this.heart3.imgtag.remove();
+    this.heart3 = new Heart("img/heart01.png");
+    this.heart3.x = (400.0);
+    this.heart3.setPos();
+  }
+  if (this.life <= (1)) {
+    this.heart2.imgtag.remove();
+    this.heart2 = new Heart("img/heart01.png");
+  }
+  if (this.life <= (0)) {
+    this.life = (0);
+    this.heart1.imgtag.remove();
+    this.heart1 = new Heart("img/heart01.png");
+    this.heart1.x = (200.0);
+    this.heart1.setPos();
+    if (this.running) this.lose();
+  }
+}
+test01.prototype.lose = function(message) {
   this.running = false;
   this.deleteBugs();
   this.deleteIcons();
+  this.damage((3));
+  if (message != null) {
+    get$$window().alert(message);
+  }
+}
+test01.prototype.killBug = function(bug) {
+  if (this.bugs == null) return;
+  var i = this.bugs.indexOf$1(bug);
+  this.bugs.$setindex(i);
+  bug.kill();
+  bug = null;
 }
 test01.prototype.deleteBugs = function() {
   if (this.bugs == null) return;
@@ -3471,10 +3516,7 @@ test01.prototype.deleteBugs = function() {
   for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
     var bug = $$i.next();
     if (bug == null) continue;
-    var i = this.bugs.indexOf$1(bug);
-    this.bugs.$setindex(i);
-    bug.kill();
-    bug = null;
+    this.killBug(bug);
   }
   this.bugs = null;
 }
@@ -3536,7 +3578,7 @@ Bug.prototype.click = function() {
   ($0 = this.game).score = $0.score + (10);
   print$(("Score: " + this.game.score));
   get$$document().query("#score").set$text(("" + this.game.score));
-  this.kill();
+  this.game.killBug(this);
 }
 Bug.prototype.get$click = function() {
   return this.click.bind(this);
@@ -3586,8 +3628,7 @@ Icon.prototype.move = function() {
   Util.pos(this.imgtag, this.x, this.y);
 }
 Icon.prototype.click = function() {
-  get$$window().alert("NULL POINTER EXCEPTION!");
-  this.game.lose();
+  this.game.lose("NULL POINTER EXCEPTION!");
 }
 Icon.prototype.get$click = function() {
   return this.click.bind(this);
@@ -3603,6 +3644,22 @@ Util.abs = function(elem) {
 Util.pos = function(elem, x, y) {
   elem.get$style().set$left(("" + x + "PX"));
   elem.get$style().set$top(("" + y + "PX"));
+}
+// ********** Code for Heart **************
+function Heart(image_source) {
+  this.x = (300.0);
+  this.y = (500.0);
+  this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$attributes().$setindex("src", image_source);
+  get$$document().body.get$nodes().add(this.imgtag);
+  Util.abs(this.imgtag);
+  Util.pos(this.imgtag, this.x, this.y);
+  this.imgtag.width = (50);
+}
+Heart.prototype.get$x = function() { return this.x; };
+Heart.prototype.get$y = function() { return this.y; };
+Heart.prototype.setPos = function() {
+  Util.pos(this.imgtag, this.x, this.y);
 }
 // ********** Code for top level **************
 function main() {

@@ -4,6 +4,7 @@
 #source('Logo.dart');
 #source('Icon.dart');
 #source('Util.dart');
+#source('Heart.dart');
 
 class test01 {
 
@@ -17,9 +18,13 @@ class test01 {
   List<Bug> bugs;
   List<Icon> icons;
   Logo logo;
-  
+  Heart heart1;
+  Heart heart2;
+  Heart heart3;
   int score = 0;
-  
+
+  int life = 3;
+
   test01() {
   }
 
@@ -38,6 +43,16 @@ class test01 {
     Bug bug = new Bug(this, 'img/bug01.png');
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
+    
+    heart2 = new Heart ('img/heart02.png');
+    heart3 = new Heart ('img/heart02.png');
+    heart3.x = 400.0;
+    heart3.setPos();
+    heart1 = new Heart ('img/heart02.png');
+    heart1.x = 200.0;
+    heart1.setPos();
+   
+    
     
     window.setInterval(() => detectColision(), 50);
     window.setInterval(() => createBugWave(), 8000);
@@ -72,8 +87,16 @@ class test01 {
   void detectColision() {
     if (bugs == null) return;
     for (Bug bug in bugs) {
+      if (bug == null) {
+        continue;
+      }
+        
       if (distanceToLogo(bug) < 30) {
-        bug.imgtag.remove();
+        
+        killBug(bug);
+
+        damage();
+        
       }
     }
   }
@@ -90,20 +113,54 @@ class test01 {
     return Math.sqrt(dx + dy);
   }
   
-  void lose() {
+  void damage([int dmg]){
+    if (dmg != null) life -= dmg;
+    else life -= 1;
+    if (life <= 2) {
+      heart3.imgtag.remove();
+      heart3 = new Heart('img/heart01.png');
+      heart3.x = 400.0;
+      heart3.setPos();
+    }
+    if (life <= 1) {
+      heart2.imgtag.remove();
+      heart2 = new Heart('img/heart01.png');
+      
+    }
+    if (life <= 0) {
+      life = 0;
+      heart1.imgtag.remove();
+      heart1 = new Heart('img/heart01.png');
+      heart1.x = 200.0;
+      heart1.setPos();
+      if (running) lose();
+    }
+  }
+
+  void lose([String message]) {
     running = false;
     deleteBugs();
     deleteIcons();
+    damage(3);
+    
+    if (message != null) {
+      window.alert(message);
+    }
+  }
+  
+  killBug(Bug bug) {
+    if (bugs == null) return;
+    int i = bugs.indexOf(bug);
+    bugs[i] = null;
+    bug.kill();
+    bug = null;
   }
   
   deleteBugs() {
     if (bugs == null) return;
     for (Bug bug in bugs) {
       if (bug == null) continue;
-      int i = bugs.indexOf(bug);
-      bugs[i] = null;
-      bug.kill();
-      bug = null;
+      killBug(bug);
     }
     bugs = null;
   }

@@ -28,9 +28,7 @@ class Icon {
   }
   
   click() {
-    window.alert("NULL POINTER EXCEPTION!");
-    
-    game.lose();
+    game.lose("NULL POINTER EXCEPTION!");
   }
   
   kill() {
