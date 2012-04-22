@@ -16,7 +16,7 @@ class Bug {
 
   
   Bug(this.game, String image_source) {
-    x = Math.random() * 600;
+    x = Math.random() * window.innerWidth;
     y = 100.0;
     double speedbonus = Math.min((game.time/5).floor(), 10);
     speed = 2 + Math.random() * (2 + speedbonus) + speedbonus;
@@ -39,12 +39,6 @@ class Bug {
   }
   
   move() {
-/*    if (Math.x - game.logo.x) {
-      return;
-    }
-    if (y + 10 < game.logo.y) {
-      return;
-    }*/
     if (game.logo.x > x) {
       x += speed;
     }
