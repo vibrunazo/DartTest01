@@ -3747,16 +3747,18 @@ test01.prototype.deleteBugs = function() {
   }
   this.bugs = null;
 }
+test01.prototype.killIcon = function(icon) {
+  if (this.icons == null) return;
+  var i = this.icons.indexOf$1(icon);
+  icon.kill();
+  icon = null;
+}
 test01.prototype.deleteIcons = function() {
   if (this.icons == null) return;
   var $$list = this.icons;
   for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
     var icon = $$i.next();
-    if (icon == null) continue;
-    var i = this.icons.indexOf$1(icon);
-    this.icons.$setindex(i);
-    icon.kill();
-    icon = null;
+    this.killIcon(icon);
   }
   this.bugs = null;
 }
@@ -3910,6 +3912,9 @@ Icon.prototype.move = function() {
   var i = ($mod$((this.moveframe / (6)), (2)));
   var imgindex = i.toInt();
   this.imgtag.get$attributes().$setindex("src", const$0008.$index(imgindex));
+  if (this.y > Util.clientHeight()) {
+    this.game.killIcon(this);
+  }
 }
 Icon.prototype.click = function() {
   this.game.lose("NULL POINTER EXCEPTION!");
@@ -3928,6 +3933,9 @@ Util.abs = function(elem) {
 Util.pos = function(elem, x, y) {
   elem.get$style().set$left(("" + x + "PX"));
   elem.get$style().set$top(("" + y + "PX"));
+}
+Util.clientHeight = function() {
+  return get$$window().innerHeight;
 }
 // ********** Code for Heart **************
 function Heart(image_source) {

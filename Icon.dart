@@ -36,6 +36,10 @@ class Icon {
     double i = ((moveframe/6)%2);
     int imgindex = i.toInt();
     imgtag.attributes['src'] = iconimgs[imgindex];
+    
+    if (y > Util.clientHeight()) {
+      game.killIcon(this);
+    }
   }
   
   click() {

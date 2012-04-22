@@ -175,14 +175,18 @@ class test01 {
     bugs = null;
   }
   
+  killIcon(Icon icon) {
+    if (icons == null) return;
+    int i = icons.indexOf(icon);
+//    icons[i] = null;
+    icon.kill();
+    icon = null;
+  }
+  
   deleteIcons() {
     if (icons == null) return;
     for (Icon icon in icons) {
-      if (icon == null) continue;
-      int i = icons.indexOf(icon);
-      icons[i] = null;
-      icon.kill();
-      icon = null;
+      killIcon(icon);
     }
     bugs = null;
   }
