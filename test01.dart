@@ -3,7 +3,7 @@
 #source('Bug.dart');
 #source('Logo.dart');
 #source('Util.dart');
-
+#source('Heart.dart');
 class test01 {
 
   double x = 300.0;
@@ -12,9 +12,11 @@ class test01 {
   
   List<Bug> bugs;
   Logo logo;
-  
+  Heart heart1;
+  Heart heart2;
+  Heart heart3;
   int score = 0;
-  
+  int life = 3;
   test01() {
   }
 
@@ -33,6 +35,15 @@ class test01 {
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
     
+    heart2 = new Heart ('img/heart02.png');
+    heart3 = new Heart ('img/heart02.png');
+    heart3.x = 400.0;
+    heart3.setPos();
+    heart1 = new Heart ('img/heart02.png');
+    heart1.x = 200.0;
+    heart1.setPos();
+   
+    
     
     window.setInterval(() => detectColision(), 50);
     window.setInterval(() => createObjs(), 1000);
@@ -44,12 +55,22 @@ class test01 {
     bugs.add(bug);
 
     time += 1;
+    
   }
 
   void detectColision() {
     for (Bug bug in bugs) {
+      if (bug == null) {
+        continue;
+      }
+        
       if (distanceToLogo(bug) < 30) {
+        int i = bugs.indexOf(bug);
+        bugs[i] = null;
+       
         bug.imgtag.remove();
+        damage();
+        
       }
     }
   }
@@ -64,6 +85,27 @@ class test01 {
     dx = dx*dx;
     dy = dy*dy;
     return Math.sqrt(dx + dy);
+  }
+  void damage(){
+    life -= 1;
+    print('life = $life');
+    if (life == 2) {
+      heart3.imgtag.remove();
+      heart3 = new Heart('img/heart01.png');
+      heart3.x = 400.0;
+      heart3.setPos();
+    }
+    if (life == 1) {
+      heart2.imgtag.remove();
+      heart2 = new Heart('img/heart01.png');
+      
+    }
+    if (life == 0) {
+      heart1.imgtag.remove();
+      heart1 = new Heart('img/heart01.png');
+      heart1.x = 200.0;
+      heart1.setPos();
+    }
   }
 }
 
