@@ -3445,8 +3445,8 @@ Bug.prototype.get$click = function() {
 }
 // ********** Code for Logo **************
 function Logo(image_source) {
-  this.x = (300.0);
-  this.y = (400.0);
+  this.x = (get$$window().innerWidth / (2)) - (25);
+  this.y = (get$$window().innerHeight) - (150);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", image_source);
   get$$document().body.get$nodes().add(this.imgtag);
