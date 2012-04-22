@@ -4,6 +4,7 @@ class Icon {
   
   double x;
   double y;
+  double inix;
   double speed;
   ImageElement imgtag;
   int moveframe = 0;
@@ -12,6 +13,7 @@ class Icon {
   Icon(this.game) {
     x = Math.random() * 600;
     y = 100.0;
+    inix = x;
     speed = 4 + Math.random() * 3;
     
     imgtag = new Element.tag('img');
@@ -26,6 +28,7 @@ class Icon {
   
   move() {
     y += speed;
+    x = inix + Math.sin(moveframe/6)*50;
      
     Util.pos(imgtag, x, y);
     

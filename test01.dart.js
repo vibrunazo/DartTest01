@@ -3883,6 +3883,7 @@ function Icon(game) {
   this.game = game;
   this.x = Math.random() * (600);
   this.y = (100.0);
+  this.inix = this.x;
   this.speed = (4) + Math.random() * (3);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", const$0008.$index((0)));
@@ -3903,6 +3904,7 @@ Icon.prototype.get$x = function() { return this.x; };
 Icon.prototype.get$y = function() { return this.y; };
 Icon.prototype.move = function() {
   this.y = this.y + this.speed;
+  this.x = this.inix + Math.sin(this.moveframe / (6)) * (50);
   Util.pos(this.imgtag, this.x, this.y);
   this.moveframe++;
   var i = ($mod$((this.moveframe / (6)), (2)));
