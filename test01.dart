@@ -36,6 +36,7 @@ class test01 {
   void write(String message) {
     // the HTML library defines a global "document" variable
     document.query('#status').innerHTML = message;
+//    document.style.position = 'absolute';
     
     bugs = new List<Bug>();
     icons = new List<Icon>();

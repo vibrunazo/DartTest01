@@ -4,8 +4,8 @@ class Logo {
   ImageElement imgtag;
   
   Logo(String image_source) {
-    x = 300.0;
-    y = 400.0;
+    x = (window.innerWidth / 2) - 25; // 300.0;
+    y = (window.innerHeight) - 150; // 400.0;
     
     imgtag = new Element.tag('img');
     imgtag.attributes['src'] = image_source;
