@@ -16,7 +16,7 @@ class Bug {
 
   
   Bug(this.game, String image_source) {
-    x = Math.random() * 600;
+    x = Math.random() * window.innerWidth;
     y = 100.0;
     speed = 5 + Math.random() * 10;
     

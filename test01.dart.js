@@ -3364,7 +3364,7 @@ test01.prototype.distanceBetweenObjs = function(obj1, obj2) {
 function Bug(game, image_source) {
   var $this = this; // closure support
   this.game = game;
-  this.x = Math.random() * (600);
+  this.x = Math.random() * get$$window().innerWidth;
   this.y = (100.0);
   this.speed = (5) + Math.random() * (10);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
