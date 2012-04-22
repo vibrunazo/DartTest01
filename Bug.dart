@@ -38,12 +38,6 @@ class Bug {
   }
   
   move() {
-/*    if (Math.x - game.logo.x) {
-      return;
-    }
-    if (y + 10 < game.logo.y) {
-      return;
-    }*/
     if (game.logo.x > x) {
       x += speed;
     }
