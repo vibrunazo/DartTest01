@@ -1,0 +1,13 @@
+
+body {
+	background: #BEC3C6 url(img/bg02.jpg);
+}
+
+
+
+
+img {
+	cursor: crosshair;
+	/* cursor: url(img/hi00.png); */
+	
+}
