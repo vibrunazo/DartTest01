@@ -146,8 +146,9 @@ class test01 {
     if (message != null) {
       window.alert(message);
     }
-    
-    logo.loselogo('img/problem.png');
+    else {
+      logo.loselogo('img/problem.png');
+    }
   }
   
   killBug(Bug bug) {

@@ -35,6 +35,8 @@ class Bug {
     Util.abs(imgtag);
     Util.pos(imgtag, x, y);
     imgtag.on.click.add((e) => click());
+    imgtag.on.dragStart.add((e) => e.preventDefault());
+    imgtag.on.drag.add((e) => e.preventDefault());
     imgtag.width = 50;
     window.setInterval(() => move(), 50);
   }

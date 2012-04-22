@@ -1501,6 +1501,12 @@ function _ElementEventsImpl(_ptr) {
 _ElementEventsImpl.prototype.get$click = function() {
   return this._get("click");
 }
+_ElementEventsImpl.prototype.get$drag = function() {
+  return this._get("drag");
+}
+_ElementEventsImpl.prototype.get$dragStart = function() {
+  return this._get("dragstart");
+}
 // ********** Code for _BodyElementEventsImpl **************
 $inherits(_BodyElementEventsImpl, _ElementEventsImpl);
 function _BodyElementEventsImpl(_ptr) {
@@ -1687,6 +1693,12 @@ function _DocumentEventsImpl(_ptr) {
 }
 _DocumentEventsImpl.prototype.get$click = function() {
   return this._get("click");
+}
+_DocumentEventsImpl.prototype.get$drag = function() {
+  return this._get("drag");
+}
+_DocumentEventsImpl.prototype.get$dragStart = function() {
+  return this._get("dragstart");
 }
 // ********** Code for FilteredElementList **************
 function FilteredElementList(node) {
@@ -3708,7 +3720,9 @@ test01.prototype.lose = function(message) {
   if (message != null) {
     get$$window().alert(message);
   }
-  this.logo.loselogo("img/problem.png");
+  else {
+    this.logo.loselogo("img/problem.png");
+  }
 }
 test01.prototype.killBug = function(bug) {
   if (this.bugs == null) return;
@@ -3763,6 +3777,14 @@ function Bug(game, image_source) {
     return $this.click();
   })
   );
+  this.imgtag.get$on().get$dragStart().add((function (e) {
+    return e.preventDefault();
+  })
+  , false);
+  this.imgtag.get$on().get$drag().add((function (e) {
+    return e.preventDefault();
+  })
+  , false);
   this.imgtag.width = (50);
   get$$window().setInterval((function () {
     return $this.move();
@@ -3844,8 +3866,8 @@ Logo.prototype.get$y = function() { return this.y; };
 Logo.prototype.loselogo = function(image_source) {
   this.imgtag.get$attributes().$setindex("src", image_source);
   this.imgtag.width = (300);
-  this.x = (get$$window().innerWidth / (2)) - (this.imgtag.height / (2));
-  this.y = (get$$window().innerHeight / (1.3)) - (this.imgtag.width / (2));
+  this.x = (get$$window().innerWidth / (2)) - (this.imgtag.height / (2)) - (50);
+  this.y = (get$$window().innerHeight / (1.3)) - (this.imgtag.width / (2)) + (100);
   Util.pos(this.imgtag, this.x, this.y);
 }
 // ********** Code for Icon **************
