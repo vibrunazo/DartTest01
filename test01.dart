@@ -9,6 +9,7 @@ class test01 {
   double x = 300.0;
   double y = 100.0;
   int time = 0;
+  int waves = 0;
   
   List<Bug> bugs;
   Logo logo;
@@ -33,10 +34,16 @@ class test01 {
     bugs.add(bug);
     logo = new Logo('img/dartlogo.png');
     
-    
     window.setInterval(() => detectColision(), 50);
-    window.setInterval(() => createObjs(), 1000);
+    window.setInterval(() => createBugWave(), 8000);
+    window.setInterval(() => createObjs(), 5000);
     
+  }
+  
+  void createBugWave() {
+    window.setInterval(() => createObjs(), 5500);
+    waves++;
+    print("Waves: $waves");
   }
   
   void createObjs() {

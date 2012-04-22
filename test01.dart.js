@@ -3222,6 +3222,7 @@ function test01() {
   this.x = (300.0);
   this.y = (100.0);
   this.time = (0);
+  this.waves = (0);
   this.score = (0);
 }
 test01.prototype.get$x = function() { return this.x; };
@@ -3241,9 +3242,22 @@ test01.prototype.write = function(message) {
   })
   , (50));
   get$$window().setInterval((function () {
+    return $this.createBugWave();
+  })
+  , (8000));
+  get$$window().setInterval((function () {
     return $this.createObjs();
   })
-  , (1000));
+  , (5000));
+}
+test01.prototype.createBugWave = function() {
+  var $this = this; // closure support
+  get$$window().setInterval((function () {
+    return $this.createObjs();
+  })
+  , (5500));
+  this.waves++;
+  print$(("Waves: " + this.waves));
 }
 test01.prototype.createObjs = function() {
   var bug = new Bug(this, "img/bug01.png");
