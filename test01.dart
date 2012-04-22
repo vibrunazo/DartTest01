@@ -2,6 +2,7 @@
 
 #source('Bug.dart');
 #source('Logo.dart');
+#source('Icon.dart');
 #source('Util.dart');
 
 class test01 {
@@ -10,8 +11,11 @@ class test01 {
   double y = 100.0;
   int time = 0;
   int waves = 0;
+  bool running = true;
+  final int MAXWAVES = 20;
   
   List<Bug> bugs;
+  List<Icon> icons;
   Logo logo;
   
   int score = 0;
@@ -29,6 +33,7 @@ class test01 {
     document.query('#status').innerHTML = message;
     
     bugs = new List<Bug>();
+    icons = new List<Icon>();
     
     Bug bug = new Bug(this, 'img/bug01.png');
     bugs.add(bug);
@@ -36,23 +41,36 @@ class test01 {
     
     window.setInterval(() => detectColision(), 50);
     window.setInterval(() => createBugWave(), 8000);
-    window.setInterval(() => createObjs(), 5000);
+    window.setInterval(() => createBugs(), 5000);
+    window.setInterval(() => createIcons(), 7000);
     
   }
   
-  void createBugWave() {
-    window.setInterval(() => createObjs(), 5500);
-    waves++;
+  void createIcons() {
+    if (running) {
+      Icon icon = new Icon(this, 'img/play01.png');
+      icons.add(icon);
+    }
   }
   
-  void createObjs() {
-    Bug bug = new Bug(this, 'img/bug01.png');
-    bugs.add(bug);
-
-    time += 1;
+  void createBugWave() {
+    if (waves <= MAXWAVES && running) {
+      window.setInterval(() => createBugs(), 5500);
+      waves++;
+    }
+  }
+  
+  void createBugs() {
+    if (running) {
+      Bug bug = new Bug(this, 'img/bug01.png');
+      bugs.add(bug);
+      
+      time += 1;
+    }
   }
 
   void detectColision() {
+    if (bugs == null) return;
     for (Bug bug in bugs) {
       if (distanceToLogo(bug) < 30) {
         bug.imgtag.remove();
@@ -70,6 +88,36 @@ class test01 {
     dx = dx*dx;
     dy = dy*dy;
     return Math.sqrt(dx + dy);
+  }
+  
+  void lose() {
+    running = false;
+    deleteBugs();
+    deleteIcons();
+  }
+  
+  deleteBugs() {
+    if (bugs == null) return;
+    for (Bug bug in bugs) {
+      if (bug == null) continue;
+      int i = bugs.indexOf(bug);
+      bugs[i] = null;
+      bug.kill();
+      bug = null;
+    }
+    bugs = null;
+  }
+  
+  deleteIcons() {
+    if (icons == null) return;
+    for (Icon icon in icons) {
+      if (icon == null) continue;
+      int i = icons.indexOf(icon);
+      icons[i] = null;
+      icon.kill();
+      icon = null;
+    }
+    bugs = null;
   }
 }
 
