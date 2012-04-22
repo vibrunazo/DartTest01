@@ -2,6 +2,7 @@ class Heart {
   double x;
   double y;
   ImageElement imgtag;
+  bool alive = true;
   
   Heart(String image_source) {
     x = 300.0;

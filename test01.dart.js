@@ -296,6 +296,9 @@ $defProp(Object.prototype, "is$List", function() {
 $defProp(Object.prototype, "is$Map", function() {
   return false;
 });
+$defProp(Object.prototype, "is$RegExp", function() {
+  return false;
+});
 $defProp(Object.prototype, "is$html_Element", function() {
   return false;
 });
@@ -469,6 +472,11 @@ Math.min = function(a, b) {
     }
     if (isNaN(a)) return a;
     else return b;
+}
+// ********** Code for Strings **************
+function Strings() {}
+Strings.join = function(strings, separator) {
+  return StringBase.join(strings, separator);
 }
 // ********** Code for top level **************
 function print$(obj) {
@@ -663,6 +671,7 @@ JSSyntaxRegExp._create$ctor = function(pattern, flags) {
       this.ignoreCase = this.re.ignoreCase;
 }
 JSSyntaxRegExp._create$ctor.prototype = JSSyntaxRegExp.prototype;
+JSSyntaxRegExp.prototype.is$RegExp = function(){return true};
 JSSyntaxRegExp.prototype.hasMatch = function(str) {
   return this.re.test(str);
 }
@@ -874,6 +883,15 @@ function HashMapImplementation_Dynamic$DoubleLinkedQueueEntry_KeyValuePair() {
   this._keys = new Array((8));
   this._values = new Array((8));
 }
+// ********** Code for HashMapImplementation_dart_core_String$dart_core_String **************
+$inherits(HashMapImplementation_dart_core_String$dart_core_String, HashMapImplementation);
+function HashMapImplementation_dart_core_String$dart_core_String() {
+  this._numberOfEntries = (0);
+  this._numberOfDeleted = (0);
+  this._loadLimit = HashMapImplementation._computeLoadLimit((8));
+  this._keys = new Array((8));
+  this._values = new Array((8));
+}
 // ********** Code for HashSetImplementation **************
 function HashSetImplementation() {
   this._backingMap = new HashMapImplementation();
@@ -917,6 +935,11 @@ HashSetImplementation.prototype.toString = function() {
 }
 HashSetImplementation.prototype.add$1 = HashSetImplementation.prototype.add;
 HashSetImplementation.prototype.clear$0 = HashSetImplementation.prototype.clear$_;
+// ********** Code for HashSetImplementation_dart_core_String **************
+$inherits(HashSetImplementation_dart_core_String, HashSetImplementation);
+function HashSetImplementation_dart_core_String() {
+  this._backingMap = new HashMapImplementation_dart_core_String$dart_core_String();
+}
 // ********** Code for HashSetIterator **************
 function HashSetIterator(set_) {
   this._nextValidIndex = (-1);
@@ -1219,6 +1242,17 @@ StringImplementation.prototype.get$length = function() { return this.length; };
 StringImplementation.prototype.isEmpty = function() {
   return this.length == (0);
 }
+StringImplementation.prototype.split$_ = function(pattern) {
+  if ((typeof(pattern) == 'string')) return this._split(pattern);
+  if (!!(pattern && pattern.is$RegExp())) return this._splitRegExp(pattern);
+  $throw("String.split(Pattern) unimplemented.");
+}
+StringImplementation.prototype._split = function(pattern) {
+  'use strict'; return this.split(pattern);
+}
+StringImplementation.prototype._splitRegExp = function(pattern) {
+  'use strict'; return this.split(pattern.re);
+}
 StringImplementation.prototype.hashCode = function() {
       'use strict';
       var hash = 0;
@@ -1371,11 +1405,20 @@ $dynamic("get$attributes").Element = function() {
 $dynamic("get$elements").Element = function() {
   return new _ChildrenElementList._wrap$ctor(this);
 }
+$dynamic("get$classes").Element = function() {
+  return new _CssClassSet(this);
+}
 $dynamic("get$on").Element = function() {
   return new _ElementEventsImpl(this);
 }
 $dynamic("get$$$dom_children").Element = function() {
   return this.children;
+}
+$dynamic("get$$$dom_className").Element = function() {
+  return this.className;
+}
+$dynamic("set$$$dom_className").Element = function(value) {
+  this.className = value;
 }
 $dynamic("get$$$dom_firstElementChild").Element = function() {
   return this.firstElementChild;
@@ -1417,9 +1460,6 @@ $dynamic("get$length").AudioBuffer = function() { return this.length; };
 // ********** Code for _AudioContextImpl **************
 // ********** Code for _AudioDestinationNodeImpl **************
 // ********** Code for _MediaElementImpl **************
-$dynamic("get$on").HTMLMediaElement = function() {
-  return new _MediaElementEventsImpl(this);
-}
 // ********** Code for _AudioElementImpl **************
 // ********** Code for _AudioParamImpl **************
 $dynamic("get$name").AudioParam = function() { return this.name; };
@@ -1434,7 +1474,6 @@ $dynamic("set$value").AudioParam = function(value) { return this.value = value; 
 // ********** Code for _BarInfoImpl **************
 // ********** Code for _BaseElementImpl **************
 // ********** Code for _BaseFontElementImpl **************
-// ********** Code for _BatteryManagerImpl **************
 // ********** Code for _BeforeLoadEventImpl **************
 // ********** Code for _BiquadFilterNodeImpl **************
 // ********** Code for _BlobImpl **************
@@ -1447,6 +1486,7 @@ $dynamic("get$on").HTMLBodyElement = function() {
 function _EventsImpl(_ptr) {
   this._ptr = _ptr;
 }
+_EventsImpl.prototype.get$_ptr = function() { return this._ptr; };
 _EventsImpl.prototype.$index = function(type) {
   return this._get(type.toLowerCase());
 }
@@ -1740,6 +1780,9 @@ $dynamic("get$parent").DocumentFragment = function() {
 $dynamic("get$attributes").DocumentFragment = function() {
   return const$0006;
 }
+$dynamic("get$classes").DocumentFragment = function() {
+  return new HashSetImplementation_dart_core_String();
+}
 $dynamic("get$style").DocumentFragment = function() {
   return _ElementFactoryProvider.Element$tag$factory("div").get$style();
 }
@@ -2012,6 +2055,73 @@ _ElementAttributeMap.prototype.get$length = function() {
   return this._html_element.get$$$dom_attributes().length;
 }
 _ElementAttributeMap.prototype.clear$0 = _ElementAttributeMap.prototype.clear$_;
+// ********** Code for _CssClassSet **************
+function _CssClassSet(_element) {
+  this._html_element = _element;
+}
+_CssClassSet.prototype.is$Collection = function(){return true};
+_CssClassSet.prototype.toString = function() {
+  return this._formatSet(this._read());
+}
+_CssClassSet.prototype.iterator = function() {
+  return this._read().iterator();
+}
+_CssClassSet.prototype.forEach = function(f) {
+  this._read().forEach(f);
+}
+_CssClassSet.prototype.filter = function(f) {
+  return this._read().filter(f);
+}
+_CssClassSet.prototype.get$length = function() {
+  return this._read().get$length();
+}
+_CssClassSet.prototype.add = function(value) {
+  this._modify((function (s) {
+    return s.add$1(value);
+  })
+  );
+}
+_CssClassSet.prototype.addAll = function(collection) {
+  this._modify((function (s) {
+    return s.addAll(collection);
+  })
+  );
+}
+_CssClassSet.prototype.clear$_ = function() {
+  this._modify((function (s) {
+    return s.clear$0();
+  })
+  );
+}
+_CssClassSet.prototype._modify = function(f) {
+  var s = this._read();
+  f(s);
+  this._write(s);
+}
+_CssClassSet.prototype._read = function() {
+  var s = new HashSetImplementation_dart_core_String();
+  var $$list = this._classname().split$_(" ");
+  for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
+    var name = $$i.next();
+    var trimmed = name.trim();
+    if (!trimmed.isEmpty()) {
+      s.add(trimmed);
+    }
+  }
+  return s;
+}
+_CssClassSet.prototype._classname = function() {
+  return this._html_element.get$$$dom_className();
+}
+_CssClassSet.prototype._write = function(s) {
+  this._html_element.set$$$dom_className(this._formatSet(s));
+}
+_CssClassSet.prototype._formatSet = function(s) {
+  var list = ListFactory.ListFactory$from$factory(s);
+  return Strings.join(list, " ");
+}
+_CssClassSet.prototype.add$1 = _CssClassSet.prototype.add;
+_CssClassSet.prototype.clear$0 = _CssClassSet.prototype.clear$_;
 // ********** Code for _ElementFactoryProvider **************
 function _ElementFactoryProvider() {}
 _ElementFactoryProvider.Element$tag$factory = function(tag) {
@@ -2036,6 +2146,7 @@ function _EventListenerListImpl(_ptr, _type) {
   this._ptr = _ptr;
   this._type = _type;
 }
+_EventListenerListImpl.prototype.get$_ptr = function() { return this._ptr; };
 _EventListenerListImpl.prototype.add = function(listener, useCapture) {
   this._add(listener, useCapture);
   return this;
@@ -2396,15 +2507,8 @@ $dynamic("set$value").HTMLLIElement = function(value) { return this.value = valu
 $dynamic("get$name").HTMLMapElement = function() { return this.name; };
 // ********** Code for _MarqueeElementImpl **************
 // ********** Code for _MediaControllerImpl **************
-// ********** Code for _MediaElementEventsImpl **************
-$inherits(_MediaElementEventsImpl, _ElementEventsImpl);
-function _MediaElementEventsImpl(_ptr) {
-  _ElementEventsImpl.call(this, _ptr);
-}
 // ********** Code for _MediaElementAudioSourceNodeImpl **************
 // ********** Code for _MediaErrorImpl **************
-// ********** Code for _MediaKeyErrorImpl **************
-// ********** Code for _MediaKeyEventImpl **************
 // ********** Code for _MediaListImpl **************
 $dynamic("is$List").MediaList = function(){return true};
 $dynamic("is$Collection").MediaList = function(){return true};
@@ -2676,7 +2780,6 @@ $dynamic("set$value").HTMLParamElement = function(value) { return this.value = v
 // ********** Code for _PointImpl **************
 $dynamic("get$x").WebKitPoint = function() { return this.x; };
 $dynamic("get$y").WebKitPoint = function() { return this.y; };
-// ********** Code for _PointerLockImpl **************
 // ********** Code for _PopStateEventImpl **************
 // ********** Code for _PositionErrorImpl **************
 // ********** Code for _PreElementImpl **************
@@ -2700,6 +2803,12 @@ $dynamic("get$length").SQLResultSetRowList = function() { return this.length; };
 // ********** Code for _SQLTransactionImpl **************
 // ********** Code for _SQLTransactionSyncImpl **************
 // ********** Code for _SVGElementImpl **************
+$dynamic("get$classes").SVGElement = function() {
+  if (null == this.noSuchMethod("get:_cssClassSet", [])) {
+    this.noSuchMethod("set:_cssClassSet", [new _AttributeClassSet(this.get$_ptr())]);
+  }
+  return this.noSuchMethod("get:_cssClassSet", []);
+}
 $dynamic("get$elements").SVGElement = function() {
   return new FilteredElementList(this);
 }
@@ -2751,6 +2860,14 @@ $dynamic("get$y").SVGCursorElement = function() { return this.y; };
 // ********** Code for _SVGDefsElementImpl **************
 // ********** Code for _SVGDescElementImpl **************
 // ********** Code for _SVGDocumentImpl **************
+// ********** Code for _AttributeClassSet **************
+$inherits(_AttributeClassSet, _CssClassSet);
+function _AttributeClassSet(element) {
+  _CssClassSet.call(this, element);
+}
+_AttributeClassSet.prototype._write = function(s) {
+  this._html_element.get$attributes().$setindex("class", this._formatSet(s));
+}
 // ********** Code for _SVGElementInstanceImpl **************
 // ********** Code for _SVGElementInstanceListImpl **************
 $dynamic("get$length").SVGElementInstanceList = function() { return this.length; };
@@ -3309,7 +3426,6 @@ $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
 // ********** Code for _WebGLTextureImpl **************
 // ********** Code for _WebGLUniformLocationImpl **************
 // ********** Code for _WebGLVertexArrayObjectOESImpl **************
-// ********** Code for _WebKitCSSFilterValueImpl **************
 // ********** Code for _WebKitCSSRegionRuleImpl **************
 // ********** Code for _WebKitMutationObserverImpl **************
 // ********** Code for _WebKitNamedFlowImpl **************
@@ -3567,21 +3683,20 @@ test01.prototype.damage = function(dmg) {
   if (dmg != null) this.life = this.life - dmg;
   else this.life = this.life - (1);
   if (this.life <= (2)) {
-    this.heart3.imgtag.remove();
-    this.heart3 = new Heart("img/heart01.png");
-    this.heart3.x = (400.0);
-    this.heart3.setPos();
+    if ($eq$(this.heart3.alive, true)) {
+      this.heart3.imgtag.get$attributes().$setindex("src", "img/heart01.png");
+    }
   }
   if (this.life <= (1)) {
-    this.heart2.imgtag.remove();
-    this.heart2 = new Heart("img/heart01.png");
+    if ($eq$(this.heart2.alive, true)) {
+      this.heart2.imgtag.get$attributes().$setindex("src", "img/heart01.png");
+    }
   }
   if (this.life <= (0)) {
     this.life = (0);
-    this.heart1.imgtag.remove();
-    this.heart1 = new Heart("img/heart01.png");
-    this.heart1.x = (200.0);
-    this.heart1.setPos();
+    if ($eq$(this.heart1.alive, true)) {
+      this.heart1.imgtag.get$attributes().$setindex("src", "img/heart01.png");
+    }
     if (this.running) this.lose();
   }
 }
@@ -3590,10 +3705,10 @@ test01.prototype.lose = function(message) {
   this.deleteBugs();
   this.deleteIcons();
   this.damage((3));
-  this.logo.loselogo("img/problem.png");
   if (message != null) {
     get$$window().alert(message);
   }
+  this.logo.loselogo("img/problem.png");
 }
 test01.prototype.killBug = function(bug) {
   if (this.bugs == null) return;
@@ -3634,6 +3749,7 @@ function Bug(game, image_source) {
   var speedbonus = Math.min((this.game.time / (5)).floor(), (10));
   this.speed = (2) + Math.random() * ((2) + speedbonus) + speedbonus;
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$classes().add$1("xhair");
   this.imgindex = (0);
   this.bugtype = Math.random() * (4);
   this.bugtype = $mod$(this.bugtype, (4));
@@ -3726,10 +3842,8 @@ function Logo(image_source) {
 Logo.prototype.get$x = function() { return this.x; };
 Logo.prototype.get$y = function() { return this.y; };
 Logo.prototype.loselogo = function(image_source) {
-  this.imgtag.width = (300);
   this.imgtag.get$attributes().$setindex("src", image_source);
-  get$$document().body.get$nodes().add(this.imgtag);
-  Util.abs(this.imgtag);
+  this.imgtag.width = (300);
   this.x = (get$$window().innerWidth / (2)) - (this.imgtag.height / (2));
   this.y = (get$$window().innerHeight / (1.3)) - (this.imgtag.width / (2));
   Util.pos(this.imgtag, this.x, this.y);
@@ -3787,6 +3901,7 @@ Util.pos = function(elem, x, y) {
 }
 // ********** Code for Heart **************
 function Heart(image_source) {
+  this.alive = true;
   this.x = (300.0);
   this.y = (500.0);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
@@ -3806,33 +3921,31 @@ function main() {
   var game = new test01();
   game.run();
 }
-// 169 dynamic types.
-// 284 types
+// 168 dynamic types.
+// 283 types
 // 20 !leaf
 (function(){
   var v0/*SVGTextPositioningElement*/ = 'SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement';
-  var v1/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';
-  var v2/*SVGElement*/ = [v0/*SVGTextPositioningElement*/,'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement'].join('|');
-  var v3/*CharacterData*/ = 'CharacterData|Comment|Text|CDATASection';
-  var v4/*HTMLDocument*/ = 'HTMLDocument|SVGDocument';
-  var v5/*DocumentFragment*/ = 'DocumentFragment|ShadowRoot';
-  var v6/*Element*/ = [v1/*HTMLMediaElement*/,v2/*SVGElement*/,'Element|HTMLElement|HTMLAnchorElement|HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDetailsElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement'].join('|');
+  var v1/*SVGElement*/ = [v0/*SVGTextPositioningElement*/,'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement'].join('|');
+  var v2/*CharacterData*/ = 'CharacterData|Comment|Text|CDATASection';
+  var v3/*HTMLDocument*/ = 'HTMLDocument|SVGDocument';
+  var v4/*DocumentFragment*/ = 'DocumentFragment|ShadowRoot';
+  var v5/*Element*/ = [v1/*SVGElement*/,'Element|HTMLElement|HTMLAnchorElement|HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDetailsElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMediaElement|HTMLAudioElement|HTMLVideoElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement'].join('|');
   var table = [
     // [dynamic-dispatch-tag, tags of classes implementing dynamic-dispatch-tag]
     ['AudioParam', 'AudioParam|AudioGain']
-    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue|WebKitCSSFilterValue']
-    , ['CharacterData', v3/*CharacterData*/]
+    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue']
+    , ['CharacterData', v2/*CharacterData*/]
     , ['DOMTokenList', 'DOMTokenList|DOMSettableTokenList']
-    , ['HTMLDocument', v4/*HTMLDocument*/]
-    , ['DocumentFragment', v5/*DocumentFragment*/]
-    , ['HTMLMediaElement', v1/*HTMLMediaElement*/]
+    , ['HTMLDocument', v3/*HTMLDocument*/]
+    , ['DocumentFragment', v4/*DocumentFragment*/]
     , ['SVGTextPositioningElement', v0/*SVGTextPositioningElement*/]
-    , ['SVGElement', v2/*SVGElement*/]
-    , ['Element', v6/*Element*/]
+    , ['SVGElement', v1/*SVGElement*/]
+    , ['Element', v5/*Element*/]
     , ['Entry', 'Entry|DirectoryEntry|FileEntry']
     , ['EntrySync', 'EntrySync|DirectoryEntrySync|FileEntrySync']
     , ['HTMLCollection', 'HTMLCollection|HTMLOptionsCollection']
-    , ['Node', [v3/*CharacterData*/,v4/*HTMLDocument*/,v5/*DocumentFragment*/,v6/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
+    , ['Node', [v2/*CharacterData*/,v3/*HTMLDocument*/,v4/*DocumentFragment*/,v5/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
     , ['Uint8Array', 'Uint8Array|Uint8ClampedArray']
   ];
   $dynamicSetMetadata(table);

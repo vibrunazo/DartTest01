@@ -16,10 +16,10 @@ class Logo {
   }
   
   loselogo(String image_source) {
-    imgtag.width = 300;
     imgtag.attributes['src'] = image_source;
-    document.body.nodes.add(imgtag);
-    Util.abs(imgtag);
+    imgtag.width = 300;
+//    document.body.nodes.add(imgtag);
+//    Util.abs(imgtag);
     x = (window.innerWidth / 2) - (imgtag.height / 2);
     y = (window.innerHeight / 1.3) - (imgtag.width / 2);
     Util.pos(imgtag, x, y);

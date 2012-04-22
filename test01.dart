@@ -118,22 +118,21 @@ class test01 {
     if (dmg != null) life -= dmg;
     else life -= 1;
     if (life <= 2) {
-      heart3.imgtag.remove();
-      heart3 = new Heart('img/heart01.png');
-      heart3.x = 400.0;
-      heart3.setPos();
+      if (heart3.alive == true) {
+        heart3.imgtag.attributes['src'] = 'img/heart01.png';  
+      }
     }
     if (life <= 1) {
-      heart2.imgtag.remove();
-      heart2 = new Heart('img/heart01.png');
+      if (heart2.alive == true) {
+        heart2.imgtag.attributes['src'] = 'img/heart01.png';  
+      }
       
     }
     if (life <= 0) {
       life = 0;
-      heart1.imgtag.remove();
-      heart1 = new Heart('img/heart01.png');
-      heart1.x = 200.0;
-      heart1.setPos();
+      if (heart1.alive == true) {
+        heart1.imgtag.attributes['src'] = 'img/heart01.png';  
+      }
       if (running) lose();
     }
   }
@@ -143,11 +142,12 @@ class test01 {
     deleteBugs();
     deleteIcons();
     damage(3);
-    logo.loselogo('img/problem.png');
     
     if (message != null) {
       window.alert(message);
     }
+    
+    logo.loselogo('img/problem.png');
   }
   
   killBug(Bug bug) {

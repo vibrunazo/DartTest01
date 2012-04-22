@@ -22,6 +22,7 @@ class Bug {
     speed = 2 + Math.random() * (2 + speedbonus) + speedbonus;
     
     imgtag = new Element.tag('img');
+    imgtag.classes.add('xhair');
     imgindex = 0;
     bugtype = Math.random() * 4;
     bugtype = bugtype % 4;
