@@ -284,6 +284,9 @@ $defProp(Object.prototype, "add$1", function($0) {
 $defProp(Object.prototype, "clear$0", function() {
   return this.noSuchMethod("clear", []);
 });
+$defProp(Object.prototype, "indexOf$1", function($0) {
+  return this.noSuchMethod("indexOf", [$0]);
+});
 $defProp(Object.prototype, "is$Collection", function() {
   return false;
 });
@@ -458,6 +461,15 @@ Function.prototype.call$2 = function($0, $1) {
 };
 function to$call$2(f) { return f && f.to$call$2(); }
 // ********** Code for Math **************
+Math.min = function(a, b) {
+  if (a == b) return a;
+    if (a < b) {
+      if (isNaN(b)) return b;
+      else return a;
+    }
+    if (isNaN(a)) return a;
+    else return b;
+}
 // ********** Code for top level **************
 function print$(obj) {
   return _print(obj);
@@ -564,6 +576,7 @@ $defProp(ListFactory.prototype, "toString", function() {
 });
 $defProp(ListFactory.prototype, "add$1", ListFactory.prototype.add);
 $defProp(ListFactory.prototype, "clear$0", ListFactory.prototype.clear$_);
+$defProp(ListFactory.prototype, "indexOf$1", ListFactory.prototype.indexOf);
 // ********** Code for ListIterator **************
 function ListIterator(array) {
   this._array = array;
@@ -655,6 +668,9 @@ JSSyntaxRegExp.prototype.hasMatch = function(str) {
 }
 // ********** Code for NumImplementation **************
 NumImplementation = Number;
+NumImplementation.prototype.floor = function() {
+  'use strict'; return Math.floor(this);
+}
 NumImplementation.prototype.hashCode = function() {
   'use strict'; return this & 0x1FFFFFFF;
 }
@@ -1216,6 +1232,7 @@ StringImplementation.prototype.hashCode = function() {
       hash ^= hash >> 11;
       return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
 }
+StringImplementation.prototype.indexOf$1 = StringImplementation.prototype.indexOf;
 // ********** Code for _ArgumentMismatchException **************
 $inherits(_ArgumentMismatchException, ClosureArgumentMismatchException);
 function _ArgumentMismatchException(_message) {
@@ -1400,9 +1417,6 @@ $dynamic("get$length").AudioBuffer = function() { return this.length; };
 // ********** Code for _AudioContextImpl **************
 // ********** Code for _AudioDestinationNodeImpl **************
 // ********** Code for _MediaElementImpl **************
-$dynamic("get$on").HTMLMediaElement = function() {
-  return new _MediaElementEventsImpl(this);
-}
 // ********** Code for _AudioElementImpl **************
 // ********** Code for _AudioParamImpl **************
 $dynamic("get$name").AudioParam = function() { return this.name; };
@@ -1417,7 +1431,6 @@ $dynamic("set$value").AudioParam = function(value) { return this.value = value; 
 // ********** Code for _BarInfoImpl **************
 // ********** Code for _BaseElementImpl **************
 // ********** Code for _BaseFontElementImpl **************
-// ********** Code for _BatteryManagerImpl **************
 // ********** Code for _BeforeLoadEventImpl **************
 // ********** Code for _BiquadFilterNodeImpl **************
 // ********** Code for _BlobImpl **************
@@ -1517,6 +1530,9 @@ $dynamic("forEach").CanvasPixelArray = function(f) {
 $dynamic("filter").CanvasPixelArray = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").CanvasPixelArray = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").CanvasPixelArray = function() {
   return this.$index(this.length - (1));
 }
@@ -1525,6 +1541,9 @@ $dynamic("removeLast").CanvasPixelArray = function() {
 }
 $dynamic("add$1").CanvasPixelArray = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").CanvasPixelArray = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _CanvasRenderingContextImpl **************
 // ********** Code for _CanvasRenderingContext2DImpl **************
@@ -1685,11 +1704,17 @@ FilteredElementList.prototype.$index = function(index) {
 FilteredElementList.prototype.iterator = function() {
   return this.get$_filtered().iterator();
 }
+FilteredElementList.prototype.indexOf = function(element, start) {
+  return this.get$_filtered().indexOf(element, start);
+}
 FilteredElementList.prototype.last = function() {
   return this.get$_filtered().last();
 }
 FilteredElementList.prototype.add$1 = FilteredElementList.prototype.add;
 FilteredElementList.prototype.clear$0 = FilteredElementList.prototype.clear$_;
+FilteredElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _DocumentFragmentImpl **************
 $dynamic("is$html_Element").DocumentFragment = function(){return true};
 $dynamic("get$elements").DocumentFragment = function() {
@@ -1786,6 +1811,9 @@ _ChildrenElementList.prototype.addAll = function(collection) {
     this._html_element.appendChild(element);
   }
 }
+_ChildrenElementList.prototype.indexOf = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 _ChildrenElementList.prototype.clear$_ = function() {
   this._html_element.set$text("");
 }
@@ -1801,6 +1829,9 @@ _ChildrenElementList.prototype.last = function() {
 }
 _ChildrenElementList.prototype.add$1 = _ChildrenElementList.prototype.add;
 _ChildrenElementList.prototype.clear$0 = _ChildrenElementList.prototype.clear$_;
+_ChildrenElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _FrozenElementList **************
 _FrozenElementList._wrap$ctor = function(_nodeList) {
   this._nodeList = _nodeList;
@@ -1844,6 +1875,9 @@ _FrozenElementList.prototype.iterator = function() {
 _FrozenElementList.prototype.addAll = function(collection) {
   $throw(const$0004);
 }
+_FrozenElementList.prototype.indexOf = function(element, start) {
+  return this._nodeList.indexOf(element, start);
+}
 _FrozenElementList.prototype.clear$_ = function() {
   $throw(const$0004);
 }
@@ -1855,6 +1889,9 @@ _FrozenElementList.prototype.last = function() {
 }
 _FrozenElementList.prototype.add$1 = _FrozenElementList.prototype.add;
 _FrozenElementList.prototype.clear$0 = _FrozenElementList.prototype.clear$_;
+_FrozenElementList.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _FrozenElementListIterator **************
 function _FrozenElementListIterator(_list) {
   this._html_index = (0);
@@ -1897,6 +1934,9 @@ _ListWrapper.prototype.add = function(value) {
 _ListWrapper.prototype.addAll = function(collection) {
   return this._html_list.addAll(collection);
 }
+_ListWrapper.prototype.indexOf = function(element, start) {
+  return this._html_list.indexOf(element, start);
+}
 _ListWrapper.prototype.clear$_ = function() {
   return this._html_list.clear$_();
 }
@@ -1911,6 +1951,9 @@ _ListWrapper.prototype.get$first = function() {
 }
 _ListWrapper.prototype.add$1 = _ListWrapper.prototype.add;
 _ListWrapper.prototype.clear$0 = _ListWrapper.prototype.clear$_;
+_ListWrapper.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _ListWrapper_Element **************
 $inherits(_ListWrapper_Element, _ListWrapper);
 function _ListWrapper_Element(_list) {
@@ -1918,6 +1961,9 @@ function _ListWrapper_Element(_list) {
 }
 _ListWrapper_Element.prototype.add$1 = _ListWrapper_Element.prototype.add;
 _ListWrapper_Element.prototype.clear$0 = _ListWrapper_Element.prototype.clear$_;
+_ListWrapper_Element.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _ElementList **************
 $inherits(_ElementList, _ListWrapper_Element);
 function _ElementList(list) {
@@ -2038,6 +2084,9 @@ $dynamic("forEach").Float32Array = function(f) {
 $dynamic("filter").Float32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Float32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Float32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2046,6 +2095,9 @@ $dynamic("removeLast").Float32Array = function() {
 }
 $dynamic("add$1").Float32Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Float32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Float64ArrayImpl **************
 $dynamic("is$List").Float64Array = function(){return true};
@@ -2072,6 +2124,9 @@ $dynamic("forEach").Float64Array = function(f) {
 $dynamic("filter").Float64Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Float64Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Float64Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2080,6 +2135,9 @@ $dynamic("removeLast").Float64Array = function() {
 }
 $dynamic("add$1").Float64Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Float64Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _FontElementImpl **************
 // ********** Code for _FormElementImpl **************
@@ -2126,6 +2184,9 @@ $dynamic("forEach").HTMLCollection = function(f) {
 $dynamic("filter").HTMLCollection = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").HTMLCollection = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 $dynamic("last").HTMLCollection = function() {
   return this.$index(this.get$length() - (1));
 }
@@ -2134,6 +2195,9 @@ $dynamic("removeLast").HTMLCollection = function() {
 }
 $dynamic("add$1").HTMLCollection = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").HTMLCollection = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _HTMLOptionsCollectionImpl **************
 $dynamic("get$length").HTMLOptionsCollection = function() {
@@ -2215,6 +2279,9 @@ $dynamic("forEach").Int16Array = function(f) {
 $dynamic("filter").Int16Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int16Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int16Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2223,6 +2290,9 @@ $dynamic("removeLast").Int16Array = function() {
 }
 $dynamic("add$1").Int16Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Int16Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Int32ArrayImpl **************
 $dynamic("is$List").Int32Array = function(){return true};
@@ -2249,6 +2319,9 @@ $dynamic("forEach").Int32Array = function(f) {
 $dynamic("filter").Int32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2257,6 +2330,9 @@ $dynamic("removeLast").Int32Array = function() {
 }
 $dynamic("add$1").Int32Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Int32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Int8ArrayImpl **************
 $dynamic("is$List").Int8Array = function(){return true};
@@ -2283,6 +2359,9 @@ $dynamic("forEach").Int8Array = function(f) {
 $dynamic("filter").Int8Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Int8Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Int8Array = function() {
   return this.$index(this.length - (1));
 }
@@ -2291,6 +2370,9 @@ $dynamic("removeLast").Int8Array = function() {
 }
 $dynamic("add$1").Int8Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Int8Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _JavaScriptAudioNodeImpl **************
 // ********** Code for _JavaScriptCallFrameImpl **************
@@ -2310,15 +2392,8 @@ $dynamic("set$value").HTMLLIElement = function(value) { return this.value = valu
 $dynamic("get$name").HTMLMapElement = function() { return this.name; };
 // ********** Code for _MarqueeElementImpl **************
 // ********** Code for _MediaControllerImpl **************
-// ********** Code for _MediaElementEventsImpl **************
-$inherits(_MediaElementEventsImpl, _ElementEventsImpl);
-function _MediaElementEventsImpl(_ptr) {
-  _ElementEventsImpl.call(this, _ptr);
-}
 // ********** Code for _MediaElementAudioSourceNodeImpl **************
 // ********** Code for _MediaErrorImpl **************
-// ********** Code for _MediaKeyErrorImpl **************
-// ********** Code for _MediaKeyEventImpl **************
 // ********** Code for _MediaListImpl **************
 $dynamic("is$List").MediaList = function(){return true};
 $dynamic("is$Collection").MediaList = function(){return true};
@@ -2344,6 +2419,9 @@ $dynamic("forEach").MediaList = function(f) {
 $dynamic("filter").MediaList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").MediaList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").MediaList = function() {
   return this.$index(this.length - (1));
 }
@@ -2352,6 +2430,9 @@ $dynamic("removeLast").MediaList = function() {
 }
 $dynamic("add$1").MediaList = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").MediaList = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _MediaQueryListImpl **************
 // ********** Code for _MediaQueryListListenerImpl **************
@@ -2404,6 +2485,9 @@ $dynamic("forEach").NamedNodeMap = function(f) {
 $dynamic("filter").NamedNodeMap = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").NamedNodeMap = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").NamedNodeMap = function() {
   return this.$index(this.length - (1));
 }
@@ -2412,6 +2496,9 @@ $dynamic("removeLast").NamedNodeMap = function() {
 }
 $dynamic("add$1").NamedNodeMap = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").NamedNodeMap = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _NavigatorImpl **************
 // ********** Code for _NavigatorUserMediaErrorImpl **************
@@ -2455,6 +2542,9 @@ _ChildNodeListLazy.prototype.forEach = function(f) {
 _ChildNodeListLazy.prototype.filter = function(f) {
   return new _NodeListWrapper(_Collections.filter(this, [], f));
 }
+_ChildNodeListLazy.prototype.indexOf = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.get$length());
+}
 _ChildNodeListLazy.prototype.get$length = function() {
   return this._this.get$$$dom_childNodes().length;
 }
@@ -2463,6 +2553,9 @@ _ChildNodeListLazy.prototype.$index = function(index) {
 }
 _ChildNodeListLazy.prototype.add$1 = _ChildNodeListLazy.prototype.add;
 _ChildNodeListLazy.prototype.clear$0 = _ChildNodeListLazy.prototype.clear$_;
+_ChildNodeListLazy.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _NodeFilterImpl **************
 // ********** Code for _NodeIteratorImpl **************
 // ********** Code for _ListWrapper_Node **************
@@ -2472,6 +2565,9 @@ function _ListWrapper_Node(_list) {
 }
 _ListWrapper_Node.prototype.add$1 = _ListWrapper_Node.prototype.add;
 _ListWrapper_Node.prototype.clear$0 = _ListWrapper_Node.prototype.clear$_;
+_ListWrapper_Node.prototype.indexOf$1 = function($0) {
+  return this.indexOf($0, (0));
+};
 // ********** Code for _NodeListWrapper **************
 $inherits(_NodeListWrapper, _ListWrapper_Node);
 function _NodeListWrapper(list) {
@@ -2514,6 +2610,9 @@ $dynamic("forEach").NodeList = function(f) {
 $dynamic("filter").NodeList = function(f) {
   return new _NodeListWrapper(_Collections.filter(this, [], f));
 }
+$dynamic("indexOf").NodeList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").NodeList = function() {
   return this.$index(this.length - (1));
 }
@@ -2526,6 +2625,9 @@ $dynamic("add$1").NodeList = function($0) {
 };
 $dynamic("clear$0").NodeList = function() {
   return this.clear$_();
+};
+$dynamic("indexOf$1").NodeList = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _NodeSelectorImpl **************
 // ********** Code for _NotationImpl **************
@@ -2563,7 +2665,6 @@ $dynamic("set$value").HTMLParamElement = function(value) { return this.value = v
 // ********** Code for _PointImpl **************
 $dynamic("get$x").WebKitPoint = function() { return this.x; };
 $dynamic("get$y").WebKitPoint = function() { return this.y; };
-// ********** Code for _PointerLockImpl **************
 // ********** Code for _PopStateEventImpl **************
 // ********** Code for _PositionErrorImpl **************
 // ********** Code for _PreElementImpl **************
@@ -2968,6 +3069,9 @@ $dynamic("forEach").StyleSheetList = function(f) {
 $dynamic("filter").StyleSheetList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").StyleSheetList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").StyleSheetList = function() {
   return this.$index(this.length - (1));
 }
@@ -2976,6 +3080,9 @@ $dynamic("removeLast").StyleSheetList = function() {
 }
 $dynamic("add$1").StyleSheetList = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").StyleSheetList = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _TableCaptionElementImpl **************
 // ********** Code for _TableCellElementImpl **************
@@ -3026,6 +3133,9 @@ $dynamic("forEach").TouchList = function(f) {
 $dynamic("filter").TouchList = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").TouchList = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").TouchList = function() {
   return this.$index(this.length - (1));
 }
@@ -3034,6 +3144,9 @@ $dynamic("removeLast").TouchList = function() {
 }
 $dynamic("add$1").TouchList = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").TouchList = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _TrackElementImpl **************
 // ********** Code for _TrackEventImpl **************
@@ -3065,6 +3178,9 @@ $dynamic("forEach").Uint16Array = function(f) {
 $dynamic("filter").Uint16Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint16Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint16Array = function() {
   return this.$index(this.length - (1));
 }
@@ -3073,6 +3189,9 @@ $dynamic("removeLast").Uint16Array = function() {
 }
 $dynamic("add$1").Uint16Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Uint16Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Uint32ArrayImpl **************
 $dynamic("is$List").Uint32Array = function(){return true};
@@ -3099,6 +3218,9 @@ $dynamic("forEach").Uint32Array = function(f) {
 $dynamic("filter").Uint32Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint32Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint32Array = function() {
   return this.$index(this.length - (1));
 }
@@ -3107,6 +3229,9 @@ $dynamic("removeLast").Uint32Array = function() {
 }
 $dynamic("add$1").Uint32Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Uint32Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Uint8ArrayImpl **************
 $dynamic("is$List").Uint8Array = function(){return true};
@@ -3133,6 +3258,9 @@ $dynamic("forEach").Uint8Array = function(f) {
 $dynamic("filter").Uint8Array = function(f) {
   return _Collections.filter(this, [], f);
 }
+$dynamic("indexOf").Uint8Array = function(element, start) {
+  return _Lists.indexOf(this, element, start, this.length);
+}
 $dynamic("last").Uint8Array = function() {
   return this.$index(this.length - (1));
 }
@@ -3141,6 +3269,9 @@ $dynamic("removeLast").Uint8Array = function() {
 }
 $dynamic("add$1").Uint8Array = function($0) {
   return this.add($0);
+};
+$dynamic("indexOf$1").Uint8Array = function($0) {
+  return this.indexOf($0, (0));
 };
 // ********** Code for _Uint8ClampedArrayImpl **************
 // ********** Code for _UnknownElementImpl **************
@@ -3166,7 +3297,6 @@ $dynamic("get$name").WebGLActiveInfo = function() { return this.name; };
 // ********** Code for _WebGLTextureImpl **************
 // ********** Code for _WebGLUniformLocationImpl **************
 // ********** Code for _WebGLVertexArrayObjectOESImpl **************
-// ********** Code for _WebKitCSSFilterValueImpl **************
 // ********** Code for _WebKitCSSRegionRuleImpl **************
 // ********** Code for _WebKitMutationObserverImpl **************
 // ********** Code for _WebKitNamedFlowImpl **************
@@ -3297,6 +3427,23 @@ function _FixedSizeListIterator_html_Touch(array) {
   this._html_length = array.get$length();
   _VariableSizeListIterator_html_Touch.call(this, array);
 }
+// ********** Code for _Lists **************
+function _Lists() {}
+_Lists.indexOf = function(a, element, startIndex, endIndex) {
+  if (startIndex >= a.get$length()) {
+    return (-1);
+  }
+  if (startIndex < (0)) {
+    startIndex = (0);
+  }
+  for (var i = startIndex;
+   i < endIndex; i++) {
+    if ($eq$(a.$index(i), element)) {
+      return i;
+    }
+  }
+  return (-1);
+}
 // ********** Code for top level **************
 function get$$window() {
   return window;
@@ -3313,7 +3460,11 @@ function test01() {
   this.x = (300.0);
   this.y = (100.0);
   this.time = (0);
+  this.waves = (0);
+  this.running = true;
+  this.MAXWAVES = (20);
   this.score = (0);
+  this.life = (3);
 }
 test01.prototype.get$x = function() { return this.x; };
 test01.prototype.get$y = function() { return this.y; };
@@ -3324,29 +3475,68 @@ test01.prototype.write = function(message) {
   var $this = this; // closure support
   get$$document().query("#status").set$innerHTML(message);
   this.bugs = new Array();
+  this.icons = new Array();
   var bug = new Bug(this, "img/bug01.png");
   this.bugs.add(bug);
   this.logo = new Logo("img/dartlogo.png");
+  this.heart2 = new Heart("img/heart02.png");
+  this.heart3 = new Heart("img/heart02.png");
+  this.heart3.x = (400.0);
+  this.heart3.setPos();
+  this.heart1 = new Heart("img/heart02.png");
+  this.heart1.x = (200.0);
+  this.heart1.setPos();
   get$$window().setInterval((function () {
     return $this.detectColision();
   })
   , (50));
   get$$window().setInterval((function () {
-    return $this.createObjs();
+    return $this.createBugWave();
   })
-  , (1000));
+  , (8000));
+  get$$window().setInterval((function () {
+    return $this.createBugs();
+  })
+  , (5000));
+  get$$window().setInterval((function () {
+    return $this.createIcons();
+  })
+  , (7000));
 }
-test01.prototype.createObjs = function() {
-  var bug = new Bug(this, "img/bug01.png");
-  this.bugs.add(bug);
-  this.time = this.time + (1);
+test01.prototype.createIcons = function() {
+  if (this.running) {
+    var icon = new Icon(this, "img/play01.png");
+    this.icons.add(icon);
+  }
+}
+test01.prototype.createBugWave = function() {
+  var $this = this; // closure support
+  if (this.waves <= this.MAXWAVES && this.running) {
+    get$$window().setInterval((function () {
+      return $this.createBugs();
+    })
+    , (5500));
+    this.waves++;
+  }
+}
+test01.prototype.createBugs = function() {
+  if (this.running) {
+    var bug = new Bug(this, "img/bug01.png");
+    this.bugs.add(bug);
+    this.time = this.time + (1);
+  }
 }
 test01.prototype.detectColision = function() {
+  if (this.bugs == null) return;
   var $$list = this.bugs;
   for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
     var bug = $$i.next();
+    if (bug == null) {
+      continue;
+    }
     if (this.distanceToLogo(bug) < (30)) {
-      bug.imgtag.remove();
+      this.killBug(bug);
+      this.damage();
     }
   }
 }
@@ -3360,13 +3550,75 @@ test01.prototype.distanceBetweenObjs = function(obj1, obj2) {
   dy = dy * dy;
   return Math.sqrt(dx + dy);
 }
+test01.prototype.damage = function(dmg) {
+  if (dmg != null) this.life = this.life - dmg;
+  else this.life = this.life - (1);
+  if (this.life <= (2)) {
+    this.heart3.imgtag.remove();
+    this.heart3 = new Heart("img/heart01.png");
+    this.heart3.x = (400.0);
+    this.heart3.setPos();
+  }
+  if (this.life <= (1)) {
+    this.heart2.imgtag.remove();
+    this.heart2 = new Heart("img/heart01.png");
+  }
+  if (this.life <= (0)) {
+    this.life = (0);
+    this.heart1.imgtag.remove();
+    this.heart1 = new Heart("img/heart01.png");
+    this.heart1.x = (200.0);
+    this.heart1.setPos();
+    if (this.running) this.lose();
+  }
+}
+test01.prototype.lose = function(message) {
+  this.running = false;
+  this.deleteBugs();
+  this.deleteIcons();
+  this.damage((3));
+  if (message != null) {
+    get$$window().alert(message);
+  }
+}
+test01.prototype.killBug = function(bug) {
+  if (this.bugs == null) return;
+  var i = this.bugs.indexOf$1(bug);
+  this.bugs.$setindex(i);
+  bug.kill();
+  bug = null;
+}
+test01.prototype.deleteBugs = function() {
+  if (this.bugs == null) return;
+  var $$list = this.bugs;
+  for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
+    var bug = $$i.next();
+    if (bug == null) continue;
+    this.killBug(bug);
+  }
+  this.bugs = null;
+}
+test01.prototype.deleteIcons = function() {
+  if (this.icons == null) return;
+  var $$list = this.icons;
+  for (var $$i = $$list.iterator(); $$i.hasNext(); ) {
+    var icon = $$i.next();
+    if (icon == null) continue;
+    var i = this.icons.indexOf$1(icon);
+    this.icons.$setindex(i);
+    icon.kill();
+    icon = null;
+  }
+  this.bugs = null;
+}
 // ********** Code for Bug **************
 function Bug(game, image_source) {
   var $this = this; // closure support
   this.game = game;
   this.x = Math.random() * get$$window().innerWidth;
   this.y = (100.0);
-  this.speed = (5) + Math.random() * (10);
+  var speedbonus = Math.min((this.game.time / (5)).floor(), (10));
+  this.speed = (2) + Math.random() * ((2) + speedbonus) + speedbonus;
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgindex = (0);
   this.bugtype = Math.random() * (4);
@@ -3435,13 +3687,16 @@ Bug.prototype.move = function() {
 }
 Bug.prototype.click = function() {
   var $0;
-  this.imgtag.remove();
   ($0 = this.game).score = $0.score + (10);
   print$(("Score: " + this.game.score));
   get$$document().query("#score").set$text(("" + this.game.score));
+  this.game.killBug(this);
 }
 Bug.prototype.get$click = function() {
   return this.click.bind(this);
+}
+Bug.prototype.kill = function() {
+  this.imgtag.remove();
 }
 // ********** Code for Logo **************
 function Logo(image_source) {
@@ -3456,6 +3711,43 @@ function Logo(image_source) {
 }
 Logo.prototype.get$x = function() { return this.x; };
 Logo.prototype.get$y = function() { return this.y; };
+// ********** Code for Icon **************
+function Icon(game, image_source) {
+  var $this = this; // closure support
+  this.game = game;
+  this.x = Math.random() * (600);
+  this.y = (100.0);
+  this.speed = (4) + Math.random() * (3);
+  this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$attributes().$setindex("src", image_source);
+  get$$document().body.get$nodes().add(this.imgtag);
+  Util.abs(this.imgtag);
+  Util.pos(this.imgtag, this.x, this.y);
+  this.imgtag.get$on().get$click().add$1((function (e) {
+    return $this.click();
+  })
+  );
+  this.imgtag.width = (50);
+  get$$window().setInterval((function () {
+    return $this.move();
+  })
+  , (50));
+}
+Icon.prototype.get$x = function() { return this.x; };
+Icon.prototype.get$y = function() { return this.y; };
+Icon.prototype.move = function() {
+  this.y = this.y + this.speed;
+  Util.pos(this.imgtag, this.x, this.y);
+}
+Icon.prototype.click = function() {
+  this.game.lose("NULL POINTER EXCEPTION!");
+}
+Icon.prototype.get$click = function() {
+  return this.click.bind(this);
+}
+Icon.prototype.kill = function() {
+  this.imgtag.remove();
+}
 // ********** Code for Util **************
 function Util() {}
 Util.abs = function(elem) {
@@ -3465,38 +3757,52 @@ Util.pos = function(elem, x, y) {
   elem.get$style().set$left(("" + x + "PX"));
   elem.get$style().set$top(("" + y + "PX"));
 }
+// ********** Code for Heart **************
+function Heart(image_source) {
+  this.x = (300.0);
+  this.y = (500.0);
+  this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
+  this.imgtag.get$attributes().$setindex("src", image_source);
+  get$$document().body.get$nodes().add(this.imgtag);
+  Util.abs(this.imgtag);
+  Util.pos(this.imgtag, this.x, this.y);
+  this.imgtag.width = (50);
+}
+Heart.prototype.get$x = function() { return this.x; };
+Heart.prototype.get$y = function() { return this.y; };
+Heart.prototype.setPos = function() {
+  Util.pos(this.imgtag, this.x, this.y);
+}
 // ********** Code for top level **************
 function main() {
   var game = new test01();
   game.run();
 }
-// 169 dynamic types.
-// 284 types
+// 168 dynamic types.
+// 283 types
 // 20 !leaf
 (function(){
   var v0/*SVGTextPositioningElement*/ = 'SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement';
-  var v1/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';
-  var v2/*SVGElement*/ = [v0/*SVGTextPositioningElement*/,'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement'].join('|');
-  var v3/*CharacterData*/ = 'CharacterData|Comment|Text|CDATASection';
-  var v4/*HTMLDocument*/ = 'HTMLDocument|SVGDocument';
-  var v5/*DocumentFragment*/ = 'DocumentFragment|ShadowRoot';
-  var v6/*Element*/ = [v1/*HTMLMediaElement*/,v2/*SVGElement*/,'Element|HTMLElement|HTMLAnchorElement|HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDetailsElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement'].join('|');
+  var v1/*SVGElement*/ = [v0/*SVGTextPositioningElement*/,'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement'].join('|');
+  var v2/*CharacterData*/ = 'CharacterData|Comment|Text|CDATASection';
+  var v3/*HTMLDocument*/ = 'HTMLDocument|SVGDocument';
+  var v4/*DocumentFragment*/ = 'DocumentFragment|ShadowRoot';
+  var v5/*Element*/ = [v1/*SVGElement*/,'Element|HTMLElement|HTMLAnchorElement|HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDetailsElement|HTMLDirectoryElement|HTMLDivElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFormElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLInputElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMediaElement|HTMLAudioElement|HTMLVideoElement|HTMLMenuElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLSelectElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement'].join('|');
   var table = [
     // [dynamic-dispatch-tag, tags of classes implementing dynamic-dispatch-tag]
     ['AudioParam', 'AudioParam|AudioGain']
-    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue|WebKitCSSFilterValue']
-    , ['CharacterData', v3/*CharacterData*/]
+    , ['CSSValueList', 'CSSValueList|WebKitCSSTransformValue']
+    , ['CharacterData', v2/*CharacterData*/]
     , ['DOMTokenList', 'DOMTokenList|DOMSettableTokenList']
-    , ['HTMLDocument', v4/*HTMLDocument*/]
-    , ['DocumentFragment', v5/*DocumentFragment*/]
-    , ['HTMLMediaElement', v1/*HTMLMediaElement*/]
+    , ['HTMLDocument', v3/*HTMLDocument*/]
+    , ['DocumentFragment', v4/*DocumentFragment*/]
     , ['SVGTextPositioningElement', v0/*SVGTextPositioningElement*/]
-    , ['SVGElement', v2/*SVGElement*/]
-    , ['Element', v6/*Element*/]
+    , ['SVGElement', v1/*SVGElement*/]
+    , ['Element', v5/*Element*/]
     , ['Entry', 'Entry|DirectoryEntry|FileEntry']
     , ['EntrySync', 'EntrySync|DirectoryEntrySync|FileEntrySync']
     , ['HTMLCollection', 'HTMLCollection|HTMLOptionsCollection']
-    , ['Node', [v3/*CharacterData*/,v4/*HTMLDocument*/,v5/*DocumentFragment*/,v6/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
+    , ['Node', [v2/*CharacterData*/,v3/*HTMLDocument*/,v4/*DocumentFragment*/,v5/*Element*/,'Node|Attr|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
     , ['Uint8Array', 'Uint8Array|Uint8ClampedArray']
   ];
   $dynamicSetMetadata(table);

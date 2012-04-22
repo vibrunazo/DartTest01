@@ -18,7 +18,8 @@ class Bug {
   Bug(this.game, String image_source) {
     x = Math.random() * window.innerWidth;
     y = 100.0;
-    speed = 5 + Math.random() * 10;
+    double speedbonus = Math.min((game.time/5).floor(), 10);
+    speed = 2 + Math.random() * (2 + speedbonus) + speedbonus;
     
     imgtag = new Element.tag('img');
     imgindex = 0;
@@ -78,11 +79,16 @@ class Bug {
   }
 
   click() {
-    imgtag.remove();
     game.score += 10;
-    
     print("Score: ${game.score}");
     document.query('#score').text = "${game.score}";
+    
+    game.killBug(this);
+    
+  }
+  
+  kill() {
+    imgtag.remove();
   }
   
   
