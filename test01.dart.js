@@ -3675,7 +3675,7 @@ test01.prototype.detectColision = function() {
     if (bug == null) {
       continue;
     }
-    if (this.distanceToLogo(bug) < (30)) {
+    if (this.distanceToLogo(bug) < (50)) {
       this.killBug(bug);
       this.damage();
     }
@@ -3859,13 +3859,13 @@ Bug.prototype.kill = function() {
 // ********** Code for Logo **************
 function Logo(image_source) {
   this.x = (get$$window().innerWidth / (2)) - (25);
-  this.y = (get$$window().innerHeight) - (150);
+  this.y = (get$$window().innerHeight) - (180);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", image_source);
   get$$document().body.get$nodes().add(this.imgtag);
   Util.abs(this.imgtag);
   Util.pos(this.imgtag, this.x, this.y);
-  this.imgtag.width = (50);
+  this.imgtag.width = (80);
 }
 Logo.prototype.get$x = function() { return this.x; };
 Logo.prototype.get$y = function() { return this.y; };

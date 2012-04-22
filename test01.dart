@@ -92,7 +92,7 @@ class test01 {
         continue;
       }
         
-      if (distanceToLogo(bug) < 30) {
+      if (distanceToLogo(bug) < 50) {
         
         killBug(bug);
 
