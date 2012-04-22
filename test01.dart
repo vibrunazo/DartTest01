@@ -143,6 +143,7 @@ class test01 {
     deleteBugs();
     deleteIcons();
     damage(3);
+    logo.loselogo('img/problem.png');
     
     if (message != null) {
       window.alert(message);
