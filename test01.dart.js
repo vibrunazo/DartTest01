@@ -3269,7 +3269,6 @@ test01.prototype.createBugWave = function() {
   })
   , (5500));
   this.waves++;
-  print$(("Waves: " + this.waves));
 }
 test01.prototype.createObjs = function() {
   var bug = new Bug(this, "img/bug01.png");
@@ -3302,7 +3301,6 @@ function Bug(game, image_source) {
   this.x = Math.random() * (600);
   this.y = (100.0);
   var speedbonus = Math.min((this.game.time / (5)).floor(), (10));
-  print$(("speedbonus: " + speedbonus));
   this.speed = (2) + Math.random() * ((2) + speedbonus) + speedbonus;
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", image_source);

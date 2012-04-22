@@ -43,7 +43,6 @@ class test01 {
   void createBugWave() {
     window.setInterval(() => createObjs(), 5500);
     waves++;
-    print("Waves: $waves");
   }
   
   void createObjs() {
