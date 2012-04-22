@@ -1,18 +1,21 @@
 class Icon {
+
+  static final List<String> iconimgs = const  ["img/play01.png", "img/play02.png"];  
   
   double x;
   double y;
   double speed;
   ImageElement imgtag;
+  int moveframe = 0;
   test01 game;
   
-  Icon(this.game, String image_source) {
+  Icon(this.game) {
     x = Math.random() * 600;
     y = 100.0;
     speed = 4 + Math.random() * 3;
     
     imgtag = new Element.tag('img');
-    imgtag.attributes['src'] = image_source;
+    imgtag.attributes['src'] = iconimgs[0];
     document.body.nodes.add(imgtag);
     Util.abs(imgtag);
     Util.pos(imgtag, x, y);
@@ -25,6 +28,11 @@ class Icon {
     y += speed;
      
     Util.pos(imgtag, x, y);
+    
+    moveframe++;
+    double i = ((moveframe/6)%2);
+    int imgindex = i.toInt();
+    imgtag.attributes['src'] = iconimgs[imgindex];
   }
   
   click() {

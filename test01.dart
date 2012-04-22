@@ -64,7 +64,7 @@ class test01 {
   
   void createIcons() {
     if (running) {
-      Icon icon = new Icon(this, 'img/play01.png');
+      Icon icon = new Icon(this);
       icons.add(icon);
     }
   }

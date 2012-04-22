@@ -3505,7 +3505,7 @@ test01.prototype.write = function(message) {
 }
 test01.prototype.createIcons = function() {
   if (this.running) {
-    var icon = new Icon(this, "img/play01.png");
+    var icon = new Icon(this);
     this.icons.add(icon);
   }
 }
@@ -3712,14 +3712,15 @@ function Logo(image_source) {
 Logo.prototype.get$x = function() { return this.x; };
 Logo.prototype.get$y = function() { return this.y; };
 // ********** Code for Icon **************
-function Icon(game, image_source) {
+function Icon(game) {
   var $this = this; // closure support
+  this.moveframe = (0);
   this.game = game;
   this.x = Math.random() * (600);
   this.y = (100.0);
   this.speed = (4) + Math.random() * (3);
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
-  this.imgtag.get$attributes().$setindex("src", image_source);
+  this.imgtag.get$attributes().$setindex("src", const$0008.$index((0)));
   get$$document().body.get$nodes().add(this.imgtag);
   Util.abs(this.imgtag);
   Util.pos(this.imgtag, this.x, this.y);
@@ -3738,6 +3739,10 @@ Icon.prototype.get$y = function() { return this.y; };
 Icon.prototype.move = function() {
   this.y = this.y + this.speed;
   Util.pos(this.imgtag, this.x, this.y);
+  this.moveframe++;
+  var i = ($mod$((this.moveframe / (6)), (2)));
+  var imgindex = i.toInt();
+  this.imgtag.get$attributes().$setindex("src", const$0008.$index(imgindex));
 }
 Icon.prototype.click = function() {
   this.game.lose("NULL POINTER EXCEPTION!");
@@ -3818,6 +3823,7 @@ var const$0004 = Object.create(UnsupportedOperationException.prototype, {_messag
 var const$0005 = Object.create(IllegalAccessException.prototype, {});
 var const$0006 = _constMap([]);
 var const$0007 = ImmutableList.ImmutableList$from$factory(["img/bug01-01.png", "img/bug01-02.png", "img/bug02-01.png", "img/bug02-02.png", "img/bug03-01.png", "img/bug03-02.png", "img/bug04-01.png", "img/bug04-02.png"]);
+var const$0008 = ImmutableList.ImmutableList$from$factory(["img/play01.png", "img/play02.png"]);
 $static_init();
 if (typeof window != 'undefined' && typeof document != 'undefined' &&
     window.addEventListener && document.readyState == 'loading') {
