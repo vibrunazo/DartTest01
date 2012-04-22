@@ -428,6 +428,15 @@ Function.prototype.call$2 = function($0, $1) {
 };
 function to$call$2(f) { return f && f.to$call$2(); }
 // ********** Code for Math **************
+Math.min = function(a, b) {
+  if (a == b) return a;
+    if (a < b) {
+      if (isNaN(b)) return b;
+      else return a;
+    }
+    if (isNaN(a)) return a;
+    else return b;
+}
 // ********** Code for top level **************
 function print$(obj) {
   return _print(obj);
@@ -591,6 +600,9 @@ JSSyntaxRegExp.prototype.hasMatch = function(str) {
 }
 // ********** Code for NumImplementation **************
 NumImplementation = Number;
+NumImplementation.prototype.floor = function() {
+  'use strict'; return Math.floor(this);
+}
 NumImplementation.prototype.hashCode = function() {
   'use strict'; return this & 0x1FFFFFFF;
 }
@@ -3289,7 +3301,9 @@ function Bug(game, image_source) {
   this.game = game;
   this.x = Math.random() * (600);
   this.y = (100.0);
-  this.speed = (5) + Math.random() * (10);
+  var speedbonus = Math.min((this.game.time / (5)).floor(), (10));
+  print$(("speedbonus: " + speedbonus));
+  this.speed = (2) + Math.random() * ((2) + speedbonus) + speedbonus;
   this.imgtag = _ElementFactoryProvider.Element$tag$factory("img");
   this.imgtag.get$attributes().$setindex("src", image_source);
   get$$document().body.get$nodes().add(this.imgtag);
