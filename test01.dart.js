@@ -3713,12 +3713,18 @@ test01.prototype.damage = function(dmg) {
   }
 }
 test01.prototype.lose = function(message) {
+  var $0, $1;
+  if ($eq$(this.running, false)) return;
   this.running = false;
   this.deleteBugs();
   this.deleteIcons();
   this.damage((3));
   if (message != null) {
     get$$window().alert(message);
+    this.logo.loselogo("img/badum.png");
+    ($0 = this.logo).x = $0.x + (30);
+    ($1 = this.logo).y = $1.y - (160);
+    Util.pos(this.logo.imgtag, this.logo.x, this.logo.y);
   }
   else {
     this.logo.loselogo("img/problem.png");

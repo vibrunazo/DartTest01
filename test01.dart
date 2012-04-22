@@ -138,15 +138,22 @@ class test01 {
   }
 
   void lose([String message]) {
+    if (running == false) return;
     running = false;
     deleteBugs();
     deleteIcons();
     damage(3);
     
     if (message != null) {
+      // null pointer
       window.alert(message);
+      logo.loselogo('img/badum.png');
+      logo.x += 30;
+      logo.y -= 160;
+      Util.pos(logo.imgtag, logo.x, logo.y);
     }
     else {
+      // too many bugs
       logo.loselogo('img/problem.png');
     }
   }
